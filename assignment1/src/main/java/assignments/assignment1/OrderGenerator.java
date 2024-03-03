@@ -39,8 +39,29 @@ public class OrderGenerator {
      * @return String Order ID dengan format sesuai pada dokumen soal
      */
     public static String generateOrderID(String namaRestoran, String tanggalOrder, String noTelepon) {
+        String output = "";
         // TODO:Lengkapi method ini sehingga dapat mengenerate Order ID sesuai ketentuan
-        return "TP";
+        String namaRestornaNoSpaces = namaRestoran.replace(" ", "");
+        String fourLetter = namaRestornaNoSpaces.substring(0, 4);
+        output += fourLetter;
+
+        String tanggalOrderNoSlash = tanggalOrder.replace("/", "");
+        output += tanggalOrderNoSlash;
+
+        int sumOfNumber = 0;
+        for (int i = 0; i < noTelepon.length(); i++) {
+            sumOfNumber += Integer.parseInt(noTelepon.substring(i, i + 1));
+        }
+        String resultNumber;
+        int modOfSum = sumOfNumber % 100;
+        if (modOfSum < 10) {
+            resultNumber = "0" + modOfSum;
+        } else {
+            Integer.toString(modOfSum);
+        }
+
+        return output;
+        // return "haha";
     }
 
     /*
@@ -56,7 +77,13 @@ public class OrderGenerator {
      */
     public static String generateBill(String OrderID, String lokasi) {
         // TODO:Lengkapi method ini sehingga dapat mengenerate Bill sesuai ketentuan
-        return "Bill";
+        String output = "Bill:" +"\n";
+        output += "Order ID: "+ OrderID + "\n";
+        String tanggalOrder = OrderID.substring(4, 12);
+        output += "Tanggal Pemesanan: " +  tanggalOrder + "\n";
+
+
+        return output;
     }
 
     public static void main(String[] args) {
@@ -65,16 +92,18 @@ public class OrderGenerator {
         String namaRestoran;
         String tanggalOrder;
         String noTelepon;
+        String orderID;
         do {
             showMenu();
             System.out.println("---------------------------------");
             System.out.print("Pilihan menu: ");
             option = input.nextInt();
+            input.nextLine();
+            System.out.println();
             if (option == 1) {
                 boolean isValid = false;
                 while (isValid == false) {
                     System.out.print("Nama Restoran: ");
-                    input.nextLine();
                     namaRestoran = input.nextLine();
                     if (namaRestoran.length() < 4) {
                         System.out.println("Nama Restoran tidak valid!");
@@ -94,13 +123,21 @@ public class OrderGenerator {
                                 System.out.println("Harap masukan nomor telepon dalam bentuk bilangan bulat positif.");
                             } else {
                                 System.out.println(generateOrderID(namaRestoran, tanggalOrder, noTelepon));
+                                isValid = true;
                             }
                         }
                     }
 
                 }
-            } else if (option == 2){
-
+            } else if (option == 2) {
+                System.out.print("Order ID: ");
+                orderID = input.nextLine();
+                boolean isValid = false;
+                while (isValid == false) {
+                    if (orderID.length() < 16) {
+                        System.out.println("Order ID minimal 16 karakter");
+                    }
+                }
             }
         } while (option != 3);
         System.out.println("Terima kasih telah menggunakan DepeFood!");
@@ -113,14 +150,14 @@ public class OrderGenerator {
             return true; // Valid
         } catch (DateTimeParseException e) {
             return false; // Invalid
-        } //jaja
+        } // jaja
     }
 
     public static boolean isTelpValid(String noTelpon) {
-        try{
-            Integer.parseInt(noTelpon);
+        try {
+            Long.parseLong(noTelpon);
             return true;
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
     }
