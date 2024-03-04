@@ -1,9 +1,8 @@
 package assignments.assignment1;
 
 import java.util.Scanner;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.time.*;
+import java.time.format.*;
 
 public class OrderGenerator {
     private static final Scanner input = new Scanner(System.in);
@@ -32,6 +31,7 @@ public class OrderGenerator {
         System.out.println("2. Generate Bill");
         System.out.println("3. Keluar");
     }
+
     /*
      * Method ini digunakan untuk membuat ID
      * dari nama restoran, tanggal order, dan nomor telepon
@@ -77,13 +77,13 @@ public class OrderGenerator {
                 char letter = orderID.charAt(i);
                 checksumOdd += code39CharacterSet.indexOf(letter);
             }
-        }       
-        checksumOdd = checksumOdd%36;
-        checksumEven = checksumEven%36;
+        }
+        checksumOdd = checksumOdd % 36;
+        checksumEven = checksumEven % 36;
 
         char charOdd = code39CharacterSet.charAt(checksumOdd);
         char charEven = code39CharacterSet.charAt(checksumEven);
-        
+
         output += charEven;
         output += charOdd;
 
@@ -107,7 +107,24 @@ public class OrderGenerator {
         output += "Order ID: " + OrderID + "\n";
         String tanggalOrder = OrderID.substring(4, 12);
         output += "Tanggal Pemesanan: " + tanggalOrder + "\n";
+        String biayaOngkir = "";
 
+        switch (lokasi.toUpperCase()){
+            case "P":
+                biayaOngkir = "Rp. 10.000";
+                break;
+            case "U":
+                biayaOngkir = "Rp. 20.000";
+                break;
+            case "T":
+                biayaOngkir = "Rp. 35.000";
+                break;
+            case "S":
+                biayaOngkir = "Rp. 40.000";
+            case "B":
+                biayaOngkir = "Rp. 60.000";
+        }
+        output += "Biaya Ongkos Kirim: " + biayaOngkir;
         return output;
     }
 
@@ -118,8 +135,8 @@ public class OrderGenerator {
         String tanggalOrder;
         String noTelepon;
         String orderID;
+        showMenu();
         do {
-            showMenu();
             System.out.println("---------------------------------");
             System.out.print("Pilihan menu: ");
             option = input.nextInt();
@@ -147,8 +164,15 @@ public class OrderGenerator {
                             if (isTelpValid == false) {
                                 System.out.println("Harap masukan nomor telepon dalam bentuk bilangan bulat positif.");
                             } else {
-                                System.out.println(generateOrderID(namaRestoran, tanggalOrder, noTelepon));
+                                String orderId = generateOrderID(namaRestoran, tanggalOrder, noTelepon);
                                 isValid = true;
+                                System.out.println("Order ID " + orderId + " diterima!");
+                                System.out.println("---------------------------------");
+                                System.out.println("1. Generate Order ID");
+                                System.out.println("2. Generate Bill");
+                                System.out.println("3. Keluar");
+                                System.out.println("---------------------------------");
+                                System.out.println("Pilih menu:");
                             }
                         }
                     }
@@ -158,9 +182,31 @@ public class OrderGenerator {
                 System.out.print("Order ID: ");
                 orderID = input.nextLine();
                 boolean isValid = false;
+                boolean isOrderIdValid = isOrderIdValid(orderID);
+                String lokasi;
                 while (isValid == false) {
                     if (orderID.length() < 16) {
                         System.out.println("Order ID minimal 16 karakter");
+                    } else if (isOrderIdValid == false) {
+                        System.out.println("Silahkan masukkan Order ID yang valid!");
+                    } else {
+                        System.out.print("Lokasi Pengiriman: ");
+                        lokasi = input.nextLine();
+                        String lokasii = lokasi.toUpperCase();
+                        System.out.println();    
+                        if (lokasii.equals("P") | lokasii.equals("U") | lokasii.equals("T") | lokasii.equals("S") | lokasii.equals("B")) {
+                            String bill = generateBill(orderID, lokasii);
+                            System.out.println(bill);
+                            System.out.println("---------------------------------");
+                            System.out.println("1. Generate Order ID");
+                            System.out.println("2. Generate Bill");
+                            System.out.println("3. Keluar");
+                            System.out.println("---------------------------------");
+                            System.out.println("Pilih menu:");
+                            isValid = true;
+                        } else {
+                            System.out.println("Harap masukkan lokasi pengiriman yang ada pada jangkauan!");
+                        }
                     }
                 }
             }
@@ -185,6 +231,10 @@ public class OrderGenerator {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    public static boolean isOrderIdValid(String OrderID) {
+        return true;
     }
 
 }
