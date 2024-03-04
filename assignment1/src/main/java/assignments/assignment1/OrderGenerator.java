@@ -66,7 +66,6 @@ public class OrderGenerator {
         orderID += resultNumber;
         output += resultNumber;
 
-        System.out.println("OrderID sementara: " + orderID);
         int checksumOdd = 0;
         int checksumEven = 0;
         for (int i = 0; i < 14; i++) {
@@ -106,7 +105,12 @@ public class OrderGenerator {
         String output = "Bill:" + "\n";
         output += "Order ID: " + OrderID + "\n";
         String tanggalOrder = OrderID.substring(4, 12);
-        output += "Tanggal Pemesanan: " + tanggalOrder + "\n";
+        String day = tanggalOrder.substring(0,2);
+        String month  = tanggalOrder.substring(2,4);
+        String year = tanggalOrder.substring(4, 8);
+        String date = day +"/"+month+"/"+year;
+        output += "Tanggal Pemesanan: " + date + "\n";
+        output += "Lokasi Pengiriman: "+ lokasi +"\n";
         String biayaOngkir = "";
 
         switch (lokasi.toUpperCase()){
@@ -171,41 +175,40 @@ public class OrderGenerator {
                                 System.out.println("1. Generate Order ID");
                                 System.out.println("2. Generate Bill");
                                 System.out.println("3. Keluar");
-                                System.out.println("---------------------------------");
-                                System.out.println("Pilih menu:");
                             }
                         }
                     }
 
                 }
             } else if (option == 2) {
-                System.out.print("Order ID: ");
-                orderID = input.nextLine();
                 boolean isValid = false;
-                boolean isOrderIdValid = isOrderIdValid(orderID);
                 String lokasi;
-                while (isValid == false) {
+                while (isValid == false){
+                    System.out.print("Order ID: ");
+                    orderID = input.nextLine();
                     if (orderID.length() < 16) {
                         System.out.println("Order ID minimal 16 karakter");
-                    } else if (isOrderIdValid == false) {
-                        System.out.println("Silahkan masukkan Order ID yang valid!");
-                    } else {
-                        System.out.print("Lokasi Pengiriman: ");
-                        lokasi = input.nextLine();
-                        String lokasii = lokasi.toUpperCase();
-                        System.out.println();    
-                        if (lokasii.equals("P") | lokasii.equals("U") | lokasii.equals("T") | lokasii.equals("S") | lokasii.equals("B")) {
-                            String bill = generateBill(orderID, lokasii);
-                            System.out.println(bill);
-                            System.out.println("---------------------------------");
-                            System.out.println("1. Generate Order ID");
-                            System.out.println("2. Generate Bill");
-                            System.out.println("3. Keluar");
-                            System.out.println("---------------------------------");
-                            System.out.println("Pilih menu:");
-                            isValid = true;
-                        } else {
-                            System.out.println("Harap masukkan lokasi pengiriman yang ada pada jangkauan!");
+                    }else {
+                        if (isOrderIdValid(orderID) == false) {
+                            System.out.println("Silahkan masukkan Order ID yang valid!");
+                            System.out.println();
+                        }else{
+                            System.out.print("Lokasi Pengiriman: ");
+                            lokasi = input.nextLine();
+                            String lokasii = lokasi.toUpperCase();
+                            System.out.println();    
+                            if (lokasii.equals("P") | lokasii.equals("U") | lokasii.equals("T") | lokasii.equals("S") | lokasii.equals("B")) {
+                                String bill = generateBill(orderID, lokasii);
+                                System.out.println(bill);
+                                System.out.println("---------------------------------");
+                                System.out.println("1. Generate Order ID");
+                                System.out.println("2. Generate Bill");
+                                System.out.println("3. Keluar");
+                                isValid = true;
+                            }else{
+                                System.out.println("Harap masukkan lokasi pengiriman yang ada pada jangkauan!");
+                                System.out.println();
+                            }
                         }
                     }
                 }
@@ -218,10 +221,10 @@ public class OrderGenerator {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
             LocalDate.parse(tanggalOrder, formatter);
-            return true; // Valid
+            return true;
         } catch (DateTimeParseException e) {
-            return false; // Invalid
-        } // jaja
+            return false;
+        } 
     }
 
     public static boolean isTelpValid(String noTelpon) {
@@ -234,7 +237,39 @@ public class OrderGenerator {
     }
 
     public static boolean isOrderIdValid(String OrderID) {
-        return true;
+        // String kodeRestoran = OrderID.substring(0,4);
+
+        // String tanggalOrder = OrderID.substring(4,12);
+        // String day = tanggalOrder.substring(0,2);
+        // String month  = tanggalOrder.substring(2,4);
+        // String year = tanggalOrder.substring(4, 8);
+        // String date = day +"/"+month+"/"+year;
+
+        String codeToCheck = OrderID.substring(0, 14);
+        String resultToCompare = OrderID.substring(14);
+        String checkSum = "";
+        int checksumOdd = 0;
+        int checksumEven = 0;
+        for (int i = 0; i < 14; i++) {
+            if (i % 2 == 0) {
+                char letter = codeToCheck.charAt(i);
+                checksumEven += code39CharacterSet.indexOf(letter);
+            } else {
+                char letter = codeToCheck.charAt(i);
+                checksumOdd += code39CharacterSet.indexOf(letter);
+            }
+        }
+        checksumOdd = checksumOdd % 36;
+        checksumEven = checksumEven % 36;
+        char charOdd = code39CharacterSet.charAt(checksumOdd);
+        char charEven = code39CharacterSet.charAt(checksumEven);
+        checkSum += charEven;
+        checkSum += charOdd;
+        if (checkSum.equals(resultToCompare)){
+            return true;
+        } else{
+            return false;
+        }
     }
 
 }
