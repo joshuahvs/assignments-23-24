@@ -32,7 +32,6 @@ public class OrderGenerator {
         System.out.println("2. Generate Bill");
         System.out.println("3. Keluar");
     }
-
     /*
      * Method ini digunakan untuk membuat ID
      * dari nama restoran, tanggal order, dan nomor telepon
@@ -52,13 +51,11 @@ public class OrderGenerator {
         String tanggalOrderNoSlash = tanggalOrder.replace("/", "");
         output += tanggalOrderNoSlash;
         orderID += tanggalOrderNoSlash;
-        System.out.println("output 1"+ output);
 
         int sumOfNumber = 0;
         for (int i = 0; i < noTelepon.length(); i++) {
             sumOfNumber += Integer.parseInt(noTelepon.substring(i, i + 1));
         }
-        System.out.println("sum of number " + sumOfNumber);
         String resultNumber;
         int modOfSum = sumOfNumber % 100;
         if (modOfSum < 10) {
@@ -80,29 +77,17 @@ public class OrderGenerator {
                 char letter = orderID.charAt(i);
                 checksumOdd += code39CharacterSet.indexOf(letter);
             }
-        }
-        System.out.println("output 2: "+ output);
-        // System.out.println(checksumOdd);
-        // System.out.println(checksumEven);
+        }       
         checksumOdd = checksumOdd%36;
         checksumEven = checksumEven%36;
 
-        // System.out.println(checksumOdd);
-        // System.out.println(checksumEven);
-
         char charOdd = code39CharacterSet.charAt(checksumOdd);
         char charEven = code39CharacterSet.charAt(checksumEven);
-        System.out.println("output 3: "+ output);
-
-        System.out.println(charOdd);
-        System.out.println(charEven);
-    ;
-        // System.out.println(checkSum);       
+        
         output += charEven;
         output += charOdd;
 
         return output;
-        // return "haha";
     }
 
     /*
