@@ -167,6 +167,7 @@ public class OrderGenerator {
                             // jika nomer telepon tidak valid
                             if (isTelpValid == false) {
                                 System.out.println("Harap masukan nomor telepon dalam bentuk bilangan bulat positif.");
+                                System.out.println();
                             // jika nomer telepon valid
                             } else {
                                 // mengeprint order id dan mengulangi loop
@@ -193,6 +194,7 @@ public class OrderGenerator {
                     //jika panjang kurang order id dari 16
                     if (orderID.length() < 16) {
                         System.out.println("Order ID minimal 16 karakter");
+                        System.out.println();
                     }else {
                         // jika order id tidak valid
                         if (isOrderIdValid(orderID) == false) {
@@ -203,7 +205,6 @@ public class OrderGenerator {
                             System.out.print("Lokasi Pengiriman: ");
                             lokasi = input.nextLine();
                             String lokasii = lokasi.toUpperCase();
-                            System.out.println();  
                             //jika lokasi pengiriman sesuai sesuai  
                             if (lokasii.equals("P") | lokasii.equals("U") | lokasii.equals("T") | lokasii.equals("S") | lokasii.equals("B")) {
                                 String bill = generateBill(orderID, lokasii);
