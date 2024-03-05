@@ -110,25 +110,27 @@ public class OrderGenerator {
         String year = tanggalOrder.substring(4, 8);
         String date = day +"/"+month+"/"+year;
         output += "Tanggal Pemesanan: " + date + "\n";
-        output += "Lokasi Pengiriman: "+ lokasi +"\n";
+        output += "Lokasi Pengiriman: "+ lokasi.toUpperCase() +"\n";
         String biayaOngkir = "";
 
         switch (lokasi.toUpperCase()){
             case "P":
-                biayaOngkir = "Rp. 10.000";
+                biayaOngkir = "Rp 10.000";
                 break;
             case "U":
-                biayaOngkir = "Rp. 20.000";
+                biayaOngkir = "Rp 20.000";
                 break;
             case "T":
-                biayaOngkir = "Rp. 35.000";
+                biayaOngkir = "Rp 35.000";
                 break;
             case "S":
-                biayaOngkir = "Rp. 40.000";
+                biayaOngkir = "Rp 40.000";
+                break;
             case "B":
-                biayaOngkir = "Rp. 60.000";
+                biayaOngkir = "Rp 60.000";
+                break;
         }
-        output += "Biaya Ongkos Kirim: " + biayaOngkir;
+        output += "Biaya Ongkos Kirim: " + biayaOngkir+"\n";
         return output;
     }
 
