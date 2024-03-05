@@ -1,4 +1,4 @@
-.gradle
+.gradle/
 /build/
 
 # Ignore Gradle GUI config
@@ -194,7 +194,7 @@ fabric.properties
 .history
 
 ### Gradle ###
-.gradle
+.gradle/
 build/
 
 # Ignore Gradle GUI config
