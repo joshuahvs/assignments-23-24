@@ -50,7 +50,7 @@ public class Order {
         return resto.getName();
     }
 
-    public String getStatus(){
+    public String getStatusFull(){
         if (orderFinished == true){
             return "Status Pengiriman: Finished";
         }else{
@@ -58,6 +58,13 @@ public class Order {
         }
     }
 
+    public String getStatus(){
+        if (orderFinished == true){
+            return "Selesai";
+        }else{
+            return "Belum selesai";
+        }
+    }
     // SETTER
     public void setOrderFinished(boolean status) {
         this.orderFinished = status;
