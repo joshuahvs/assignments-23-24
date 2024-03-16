@@ -4,7 +4,7 @@ package assignments.assignment2;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
+// import java.util.ArrayList;
 
 public class Order {
     // TODO: tambahkan attributes yang diperlukan untuk class ini
@@ -52,9 +52,9 @@ public class Order {
 
     public String getStatusFull(){
         if (orderFinished == true){
-            return "Status Pengiriman: Finished";
+            return "Finished";
         }else{
-            return "Status Pengiriman: Not Finished";
+            return "Not Finished";
         }
     }
 

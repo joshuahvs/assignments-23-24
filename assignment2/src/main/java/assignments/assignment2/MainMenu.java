@@ -118,7 +118,6 @@ public class MainMenu {
                         for (String menuItem : tempOrderedMenuItems) {
                             for (Menu menu : restaurant.getMenuList()) {
                                 if (menu.getNamaMakanan().trim().equalsIgnoreCase(menuItem)) {
-                                    System.out.println("sucesss");
                                     orderedMenuItems[j] = menu; // Store the ordered item
                                     j++;
                                     count--;
@@ -178,7 +177,7 @@ public class MainMenu {
     public static void handleCetakBill(User user) {
         // TODO: Implementasi method untuk handle ketika customer ingin cetak bill
         boolean orderIdFound = false;
-        System.out.println("Masukkan OrderID: ");
+        System.out.print("Masukkan OrderID: ");
         String orderId = input.nextLine();
         for (Order o : user.getOrderHistory()) {
             if (o.getOrderId().equals(orderId)) {
@@ -186,13 +185,14 @@ public class MainMenu {
                 String[] tempOrderedMenuItems = new String[o.getItems().length];
                 String output = "bill:\n";
                 int i = 0;
-                int totalHarga = 0;
+                int totalBiaya = 0;
                 for (Menu m : o.getItems()) {
-                    totalHarga += m.getHarga();
-                    String menu = "- " + m.getNamaMakanan() + " " + m.getHarga();
+                    totalBiaya += m.getHarga();
+                    String menu = "- " + m.getNamaMakanan() + " " + String.format("%.0f", m.getHarga());
                     tempOrderedMenuItems[i] = menu;
                     i++;
                 }
+                totalBiaya += o.getOngkir();
                 output += "Order Id: " + orderId + "\n";
                 output += "Tanggal Pemesanan: " + o.getTanggal() + "\n";
                 output += "Restaurant: " + o.getRestoName() + "\n";
@@ -203,7 +203,7 @@ public class MainMenu {
                     output += menu + "\n";
                 }
                 output += "Biaya Ongkos Kirim: Rp " + o.getOngkir() + "\n";
-                output += "Total Biaya: Rp " + totalHarga + o.getOngkir();
+                output += "Total Biaya: Rp " + totalBiaya;
                 System.out.println(output);
             }
         }
