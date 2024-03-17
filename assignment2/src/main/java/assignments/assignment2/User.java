@@ -3,7 +3,7 @@ package assignments.assignment2;
 import java.util.ArrayList;
 
 public class User {
-    // TODO: tambahkan attributes yang diperlukan untuk class ini
+    // menambahkan attributes yang diperlukan untuk class ini
    private String nama;
    private String nomorTelepon;
    private String email;
@@ -11,8 +11,8 @@ public class User {
    private String role;
    private ArrayList<Order> orderHistory;
 
+    // membuat constructor untuk class ini
    public User(String nama, String nomorTelepon, String email, String lokasi, String role){
-       // TODO: buat constructor untuk class ini
        this.nama = nama;
        this.nomorTelepon = nomorTelepon;
        this.email = email;
@@ -20,7 +20,8 @@ public class User {
        this.role = role;
        this.orderHistory = new ArrayList<>();
    }
-   // TODO: tambahkan methods yang diperlukan untuk class ini
+
+   // menambahkan methods yang diperlukan untuk class ini
    //GETTER
    public String getNama(){
     return nama;
@@ -40,6 +41,8 @@ public class User {
    public ArrayList<Order> getOrderHistory(){
     return orderHistory;
    }
+   
+   // Method untuk menambahkan order ke user order history
    public void addOrder(Order order){
     this.orderHistory.add(order);
    }

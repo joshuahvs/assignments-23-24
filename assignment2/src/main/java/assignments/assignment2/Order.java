@@ -1,13 +1,9 @@
 // package main.java.assignments.assignment2;
 package assignments.assignment2;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 // import java.util.ArrayList;
 
 public class Order {
-    // TODO: tambahkan attributes yang diperlukan untuk class ini
+    // menambahkan attributes yang diperlukan untuk class ini
     private String orderId;
     private String tanggal;
     private int ongkir;
@@ -15,8 +11,8 @@ public class Order {
     private Menu[] items;
     private boolean orderFinished;
 
+    // membuat constructor untuk class ini
     public Order(String orderId, String tanggal, int ongkir, Restaurant resto, Menu[] items) {
-        // TODO: buat constructor untuk class ini
         this.orderId = orderId;
         this.tanggal = tanggal;
         this.ongkir = ongkir;
@@ -25,7 +21,7 @@ public class Order {
         this.orderFinished = false;
     }
 
-    // TODO: tambahkan methods yang diperlukan untuk class ini
+    // menambahkan methods yang diperlukan untuk class ini
     // GETTER
     public String getOrderId() {
         return orderId;
@@ -57,7 +53,6 @@ public class Order {
             return "Not Finished";
         }
     }
-
     public String getStatus(){
         if (orderFinished == true){
             return "Selesai";
@@ -101,14 +96,19 @@ public class Order {
     }
 
     // method untuk memvalidasi format dari tanggal
-    public static boolean isValidDateFormat(String tanggalOrder) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // format yang sesuai
-        try {
-            LocalDate.parse(tanggalOrder, formatter);
-            return true;
-        } catch (DateTimeParseException e) {
+    public static boolean isValidDateFormat(String date) {
+        String[] parts = date.split("/");
+        if (parts.length != 3) {
             return false;
         }
+
+        for (String part : parts) {
+            if (!part.chars().allMatch(Character::isDigit)) {
+                return false;
+            }
+        }
+
+        return parts[0].length() == 2 && parts[1].length() == 2 && parts[2].length() == 4;
     }
 
     // method untuk memvalidasi nomer telepon
@@ -121,6 +121,7 @@ public class Order {
         }
     }
 
+    // method untuk generate order ID nya
     public static String generateOrderID(String namaRestoran, String tanggalOrder, String noTelepon) {
         final String code39CharacterSet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // menyimpan kode konversi
         String output = "";
