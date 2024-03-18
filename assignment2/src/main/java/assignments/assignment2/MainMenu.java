@@ -257,13 +257,13 @@ public class MainMenu {
                         swapped = false;
                         for (int i = 0; i < menuList.size() - 1; i++) {
                             if (menuList.get(i).getHarga() > menuList.get(i + 1).getHarga()) {
-                                // Swap items if out of order (price)
+                                // menukar item jika harga item lebih besar dari harga item selanjutnya
                                 Menu temp = menuList.get(i);
                                 menuList.set(i, menuList.get(i + 1));
                                 menuList.set(i + 1, temp);
                                 swapped = true;
                             } else if (menuList.get(i).getHarga() == menuList.get(i + 1).getHarga()) {
-                                // Secondary sort - alphabetical by name
+                                // jika harganya sama, maka akan mengurutkan berdasarkan alphabet
                                 if (menuList.get(i).getNamaMakanan()
                                         .compareToIgnoreCase(menuList.get(i + 1).getNamaMakanan()) > 0) {
                                     Menu temp = menuList.get(i);
