@@ -3,7 +3,7 @@ package assignments.assignment3;
 import java.util.Scanner;
 
 import assignments.assignment2.User;
-import assignments.assignment3.LoginManager
+import assignments.assignment3.LoginManager;
 import assignments.assignment3.systemCLI.AdminSystemCLI;
 import assignments.assignment3.systemCLI.CustomerSystemCLI;
 
