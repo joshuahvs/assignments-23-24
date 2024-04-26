@@ -1,8 +1,8 @@
 package assignments.assignment3.daritp2;
 
-package assignments.assignment2;
-
 import java.util.ArrayList;
+
+import assignments.assignment3.payment.DepeFoodPaymentSystem;
 
 public class User {
     
@@ -11,8 +11,11 @@ public class User {
     private String email;
     private ArrayList<Order> orderHistory;
     public String role;
-
     private String lokasi;
+
+    private DepeFoodPaymentSystem payment;
+    private long saldo;
+    
     public User(String nama, String nomorTelepon, String email, String lokasi, String role){
         this.nama = nama;
         this.nomorTelepon = nomorTelepon;
