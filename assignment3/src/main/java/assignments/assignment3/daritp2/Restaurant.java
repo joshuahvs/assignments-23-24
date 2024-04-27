@@ -8,6 +8,8 @@ import java.util.Arrays;
 public class Restaurant {
     private String nama;
     private ArrayList<Menu> menu;
+    private long saldo;
+
     public Restaurant(String nama){
         this.nama = nama;
         this.menu = new ArrayList<>();
@@ -21,6 +23,13 @@ public class Restaurant {
     }
     public ArrayList<Menu> getMenu() {
         return menu;
+    }
+
+    public long getSaldo(){
+        return saldo;
+    }
+    public void setSaldo(long saldo){
+        this.saldo = saldo;
     }
 
     private ArrayList<Menu> sortMenu(){

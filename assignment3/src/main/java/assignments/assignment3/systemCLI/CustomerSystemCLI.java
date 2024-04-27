@@ -7,14 +7,29 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-import assignments.assignment1.OrderGenerator;
+import assignments.assignment3.MainMenu;
+import assignments.assignment3.daritp1.OrderGenerator;
 import assignments.assignment3.daritp2.*;;
 
 //TODO: Extends abstract class yang diberikan
 public class CustomerSystemCLI extends UserSystemCLI {
-    private static ArrayList<Restaurant> restoList;
-    private static User userLoggedIn;
-    userLoggedIn = getUser(nama, noTelp);
+    private static final Scanner input = new Scanner(System.in);
+    static ArrayList<User> userList = MainMenu.getUserList(); 
+    static ArrayList<Restaurant> restoList = MainMenu.getRestoList(); 
+    public static User userLoggedIn;
+
+    public void run(User user) {
+        boolean isLoggedIn = true;
+        userLoggedIn = user;
+        while (isLoggedIn) {
+            displayMenu();
+            int command = input.nextInt();
+            input.nextLine();
+            isLoggedIn = handleMenu(command);
+        }
+    }
+
+
     //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
     @Override
     public boolean handleMenu(int choice){
@@ -23,7 +38,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
             case 2 -> handleCetakBill();
             case 3 -> handleLihatMenu();
             case 4 -> handleBayarBill();
-            case 5 -> handleUpdateStatusPesanan();
+            case 5 -> handleCekSaldo();
             case 6 -> {
                 return false;
             }
@@ -122,33 +137,45 @@ public class CustomerSystemCLI extends UserSystemCLI {
     }
 
     void handleBayarBill(){
-        // TODO: Implementasi method untuk handle ketika customer ingin melihat menu
-    }
-
-    public void handleUpdateStatusPesanan(){
-        // TODO: Implementasi method untuk handle ketika customer ingin update status pesanan
-        System.out.println("--------------Update Status Pesanan---------------");
+        // TODO: Implementasi method untuk handle ketika customer ingin membayar bill
+        System.out.println("--------------Cetak Bill----------------");
         while (true) {
-            System.out.print("Order ID: ");
+            System.out.print("Masukkan Order ID: ");
             String orderId = input.nextLine().trim();
             Order order = getOrderOrNull(orderId);
             if(order == null){
                 System.out.println("Order ID tidak dapat ditemukan.\n");
                 continue;
             }
-            System.out.print("Status: ");
-            String newStatus = input.nextLine().trim();
-            if(newStatus.toLowerCase().equals("SELESAI".toLowerCase())){
-                if(order.getOrderFinished() == true){
-                    System.out.printf("Status pesanan dengan ID %s tidak berhasil diupdate!", order.getOrderId());
-                }
-                else{
-                    System.out.printf("Status pesanan dengan ID %s berhasil diupdate!", order.getOrderId());
-                    order.setOrderFinished(true);
-                }
+            if (order.getOrderFinished() == true){
+                System.out.println("Pesanan dengan ID ini sudah lunas!");
+                continue;
             }
+            double totalHarga = order.getTotalHarga();
+            System.out.println("");
+            System.out.print(outputBillPesanan(order));
+            System.out.println();
+            
+            System.out.println("Opsi Pembayaran");
+            System.out.println("1. Credit Card");
+            System.out.println("2. Debit");
+            System.out.print("Pilihan Metode Pembayaran: ");
+            int pilihan = input.nextInt();
+            if (pilihan == 1){
+                userLoggedIn.getPaymentMethod().processPayment(userLoggedIn,order.getRestaurant(), order,(long) totalHarga);
+            }else if (pilihan==2){
+                userLoggedIn.getPaymentMethod().processPayment(userLoggedIn, order.getRestaurant(),order,(long) totalHarga);
+            }else{
+                System.out.println("Pilihan tidak valid");
+            }
+
             return;
         }
+    }
+
+    public void handleCekSaldo(){
+        // TODO: Implementasi method untuk handle ketika customer ingin update status pesanan
+        System.out.println("Sisa saldo sebesar Rp" + userLoggedIn.getSaldo());
     }
 
     public static Restaurant getRestaurantByName(String name){
@@ -199,8 +226,8 @@ public class CustomerSystemCLI extends UserSystemCLI {
                          "Lokasi Pengiriman: %s%n" +
                          "Status Pengiriman: %s%n"+
                          "Pesanan:%n%s%n"+
-                         "Biaya Ongkos Kirim: Rp %s%n"+
-                         "Total Biaya: Rp %s%n",
+                         "Biaya Ongkos Kirim: Rp%,d%n"+
+                         "Total Biaya: Rp%,d",
                          order.getOrderId(),
                          order.getTanggal(),
                          userLoggedIn.getLokasi(),
@@ -227,7 +254,6 @@ public class CustomerSystemCLI extends UserSystemCLI {
     }
 
     public static User getUser(String nama, String nomorTelepon){
-
         for(User user: userList){
             if(user.getNama().equals(nama.trim()) && user.getNomorTelepon().equals(nomorTelepon.trim())){
                 return user;

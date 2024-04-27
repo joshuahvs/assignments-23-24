@@ -4,12 +4,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import assignments.assignment3.MainMenu;
 import assignments.assignment3.daritp2.*;;
 
 //TODO: Extends Abstract yang diberikan
 public class AdminSystemCLI extends UserSystemCLI{
     private static final Scanner input = new Scanner(System.in);
-    private static ArrayList<Restaurant> restoList;
+    static ArrayList<Restaurant> restoList = MainMenu.getRestoList(); 
+
+    public void run(User user) {
+        boolean isLoggedIn = true;
+        while (isLoggedIn) {
+            displayMenu();
+            int command = input.nextInt();
+            input.nextLine();
+            isLoggedIn = handleMenu(command);
+        }
+    }
 
     //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
     @Override
@@ -50,6 +61,32 @@ public class AdminSystemCLI extends UserSystemCLI{
 
     protected void handleHapusRestoran(){
         // TODO: Implementasi method untuk handle ketika admin ingin tambah restoran
+        System.out.println("--------------Hapus Restoran---------------");
+        boolean allValid = false;
+        while (allValid == false) {
+            System.out.print("Nama Restoran: ");
+            String namaRestoran = input.nextLine();
+            boolean restaurantFound = false;
+            //mengiterasi restolist 
+            for (int i = 0; i < restoList.size(); i++) {
+                Restaurant restaurant = restoList.get(i);
+                //jika resto di restolist sesuai dengan nama restoran yang diinginkan
+                if (restaurant.getNama().equalsIgnoreCase(namaRestoran)) {
+                    //menghapus restoran dari restolist
+                    restoList.remove(i);
+                    restaurantFound = true;
+                    break;
+                }
+            }
+            //jika restoran ditemukan
+            if (restaurantFound == true) {
+                System.out.println("Restoran berhasil dihapus.");
+                allValid = true;
+            //jika restoran tidak ditemukan
+            } else {
+                System.out.println("Restoran tidak terdaftar dalam sistem.");
+            }
+        }
     }
 
     public static Restaurant handleTambahMenuRestaurant(Restaurant restoran){

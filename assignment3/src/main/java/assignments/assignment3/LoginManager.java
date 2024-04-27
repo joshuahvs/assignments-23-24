@@ -15,10 +15,13 @@ public class LoginManager {
 
     //TODO: Solve the error :) (It's actually easy if you have done the other TODOs)
     public UserSystemCLI getSystem(String role){
-        if(role == "Customer"){
-            return adminSystem;
-        }else{
+        System.out.println("Test 3");
+        if(role=="Customer"){
+            System.out.println("test 4");
             return customerSystem;
+        }else{
+            System.out.println("test 4");
+            return adminSystem;
         }
     }
 }

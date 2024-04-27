@@ -15,14 +15,16 @@ public class User {
 
     private DepeFoodPaymentSystem payment;
     private long saldo;
-    
-    public User(String nama, String nomorTelepon, String email, String lokasi, String role){
+
+    public User(String nama, String nomorTelepon, String email, String lokasi, String role, DepeFoodPaymentSystem payment, int saldo){
         this.nama = nama;
         this.nomorTelepon = nomorTelepon;
         this.email = email;
         this.lokasi = lokasi;
         this.role = role;
         orderHistory = new ArrayList<>();
+        this.payment = payment;
+        this.saldo = saldo;
     }
     public String getEmail() {
         return email;
@@ -50,6 +52,20 @@ public class User {
         }
         return false;
     }
+
+    public DepeFoodPaymentSystem getPaymentMethod(){
+        return payment;
+    }
+
+    public long getSaldo(){
+        return saldo;
+    }
+
+    public void  setSaldo(long saldo){
+        this.saldo = saldo;
+    }
+
+    
     @Override
     public String toString() {
         // TODO Auto-generated method stub

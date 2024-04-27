@@ -2,9 +2,12 @@ package assignments.assignment3.systemCLI;
 
 import java.util.Scanner;
 
+import assignments.assignment3.daritp2.User;
+
 public abstract class UserSystemCLI {
     protected Scanner input;
-    public void run() {
+
+    public void run(User userLoggedIn) {
         boolean isLoggedIn = true;
         while (isLoggedIn) {
             displayMenu();
