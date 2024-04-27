@@ -16,6 +16,8 @@ public class DebitPayment implements DepeFoodPaymentSystem{
         else{
             userLoggedIn.setSaldo(userLoggedIn.getSaldo()-amount);
             restaurant.setSaldo(restaurant.getSaldo()+amount);
+            order.setOrderFinished(true);
+            System.out.println("Berhasil Membayar Bill sebesar Rp " + amount);
         }
     }
 

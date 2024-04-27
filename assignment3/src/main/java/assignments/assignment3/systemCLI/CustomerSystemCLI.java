@@ -168,7 +168,6 @@ public class CustomerSystemCLI extends UserSystemCLI {
             }else{
                 System.out.println("Pilihan tidak valid");
             }
-
             return;
         }
     }
@@ -215,27 +214,33 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return null;
     }
 
-    public static String outputBillPesanan(Order order) {
-        DecimalFormat decimalFormat = new DecimalFormat();
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setGroupingSeparator('.');
-        decimalFormat.setDecimalFormatSymbols(symbols);
-        return String.format("Bill:%n" +
-                         "Order ID: %s%n" +
-                         "Tanggal Pemesanan: %s%n" +
-                         "Lokasi Pengiriman: %s%n" +
-                         "Status Pengiriman: %s%n"+
-                         "Pesanan:%n%s%n"+
-                         "Biaya Ongkos Kirim: Rp%,d%n"+
-                         "Total Biaya: Rp%,d",
-                         order.getOrderId(),
-                         order.getTanggal(),
-                         userLoggedIn.getLokasi(),
-                         !order.getOrderFinished()? "Not Finished":"Finished",
-                         getMenuPesananOutput(order),
-                         decimalFormat.format(order.getOngkir()),
-                         decimalFormat.format(order.getTotalHarga())
-                         );
+    public static String outputBillPesanan(Order o) {
+        String[] tempOrderedMenuItems = new String[o.getItems().length];
+        String output = "bill:\n";
+        int i = 0;
+        int totalBiaya = 0;
+        //mengiterasi untuk makanan yang diorder dan harganya
+        for (Menu m : o.getItems()) {
+            totalBiaya += m.getHarga();
+            String menu = "- " + m.getNamaMakanan() + " " + String.format("%.0f", m.getHarga());
+            tempOrderedMenuItems[i] = menu;
+            i++;
+        }
+        // menambahkan untuk pesan outputnya dan mengambil data dari class Order 
+        totalBiaya += o.getOngkir();
+        output += "Order Id: " + o.getOrderId() + "\n";
+        output += "Tanggal Pemesanan: " + o.getTanggal() + "\n";
+        output += "Restaurant: " + o.getRestaurant().getNama() + "\n";
+        output += "Lokasi Pengiriman: " + userLoggedIn.getLokasi() + "\n";
+        output += "Status Pengiriman: " + o.getStatusFull() + "\n";
+        output += "Pesanan:\n";
+        //mengiterasi untuk menampilakn menu di output
+        for (String menu : tempOrderedMenuItems) {
+            output += menu + "\n";
+        }
+        output += "Biaya Ongkos Kirim: Rp " + o.getOngkir() + "\n";
+        output += "Total Biaya: Rp " + totalBiaya;
+        return output;
     }
 
     public static String getMenuPesananOutput(Order order){

@@ -10,9 +10,11 @@ public class CreditCardPayment implements DepeFoodPaymentSystem {
         long fee = countTransactionFee(amount);
         long totalPayment = amount + fee;
         // Simulate Credit Card Processing...
-
-        System.out.println("Processing Credit Card Payment of Rp " + totalPayment);
-        System.out.println("Transaction fee: Rp " + fee);
+        userLoggedIn.setSaldo(userLoggedIn.getSaldo()-totalPayment);
+        restaurant.setSaldo(restaurant.getSaldo()+amount);
+        order.setOrderFinished(true);
+        System.out.println("Berhasil Membayar Bill sebesar Rp " + amount + " dengan biaya transaksi sebesar Rp " + fee);
+        
     }
 
     public long countTransactionFee(long amount){

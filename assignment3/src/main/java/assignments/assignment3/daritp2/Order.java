@@ -41,6 +41,13 @@ public class Order {
     public Menu[] getItems() {
         return items;
     }
+    public String getStatusFull(){
+        if (orderFinished == true){
+            return "Finished";
+        }else{
+            return "Not Finished";
+        }
+    }
     public Menu[] getSortedMenu(){
         Menu[] menuArr = new Menu[getItems().length];
         for(int i=0; i < getItems().length;i++){
