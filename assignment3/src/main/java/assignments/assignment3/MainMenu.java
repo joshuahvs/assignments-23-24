@@ -52,12 +52,10 @@ public class MainMenu {
         String noTelp = input.nextLine();
 
         // TODO: Validasi input login
-
         User userLoggedIn = null; // TODO: lengkapi
         for (User user : userList) {
             if (user.getNama().equalsIgnoreCase(nama)) {
                 if (user.getNomorTelepon().equals(noTelp)) {
-                    System.out.println("Test 1");
                     userLoggedIn = user;
                     break;
                 }
@@ -65,7 +63,6 @@ public class MainMenu {
         }
         if (userLoggedIn != null) {
             UserSystemCLI userSystem = loginManager.getSystem(userLoggedIn.role);
-            System.out.println("Test 2");
             userSystem.run(userLoggedIn);
         }else{
             System.out.println("Pengguna dengan data tersebut tidak ditemukan!");

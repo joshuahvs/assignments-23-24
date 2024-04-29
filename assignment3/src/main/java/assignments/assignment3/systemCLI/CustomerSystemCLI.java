@@ -9,7 +9,9 @@ import java.util.Scanner;
 
 import assignments.assignment3.MainMenu;
 import assignments.assignment3.daritp1.OrderGenerator;
-import assignments.assignment3.daritp2.*;;
+import assignments.assignment3.daritp2.*;
+import assignments.assignment3.payment.CreditCardPayment;
+import assignments.assignment3.payment.DebitPayment;;
 
 //TODO: Extends abstract class yang diberikan
 public class CustomerSystemCLI extends UserSystemCLI {
@@ -32,7 +34,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
 
     //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
     @Override
-    public boolean handleMenu(int choice){
+    protected boolean handleMenu(int choice){
         switch(choice){
             case 1 -> handleBuatPesanan();
             case 2 -> handleCetakBill();
@@ -49,7 +51,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
 
     //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
     @Override
-    public void displayMenu() {
+    protected void displayMenu() {
         System.out.println("\n--------------------------------------------");
         System.out.println("Pilih menu:");
         System.out.println("1. Buat Pesanan");
@@ -62,7 +64,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         System.out.print("Pilihan menu: ");
     }
 
-    void handleBuatPesanan(){
+    protected void handleBuatPesanan(){
         // TODO: Implementasi method untuk handle ketika customer membuat pesanan
         System.out.println("--------------Buat Pesanan----------------");
         while (true) {
@@ -103,7 +105,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
     }
 
-    void handleCetakBill(){
+    protected void handleCetakBill(){
         // TODO: Implementasi method untuk handle ketika customer ingin cetak bill
         System.out.println("--------------Cetak Bill----------------");
         while (true) {
@@ -120,7 +122,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
     }
 
-    void handleLihatMenu(){
+    protected void handleLihatMenu(){
         // TODO: Implementasi method untuk handle ketika customer ingin melihat menu
         System.out.println("--------------Lihat Menu----------------");
         while (true) {
@@ -136,7 +138,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
     }
 
-    void handleBayarBill(){
+    protected void handleBayarBill(){
         // TODO: Implementasi method untuk handle ketika customer ingin membayar bill
         System.out.println("--------------Cetak Bill----------------");
         while (true) {
@@ -156,15 +158,25 @@ public class CustomerSystemCLI extends UserSystemCLI {
             System.out.print(outputBillPesanan(order));
             System.out.println();
             
-            System.out.println("Opsi Pembayaran");
+            System.out.println("\nOpsi Pembayaran");
             System.out.println("1. Credit Card");
             System.out.println("2. Debit");
             System.out.print("Pilihan Metode Pembayaran: ");
             int pilihan = input.nextInt();
+
+            //klo yg ini dari init user
             if (pilihan == 1){
-                userLoggedIn.getPaymentMethod().processPayment(userLoggedIn,order.getRestaurant(), order,(long) totalHarga);
+                if (userLoggedIn.getPaymentMethod() instanceof CreditCardPayment){
+                    userLoggedIn.getPaymentMethod().processPayment(userLoggedIn,order.getRestaurant(), order,(long) totalHarga);
+                } else{
+                    System.out.println("User belum memiliki metode pembayaran ini!\n");
+                }
             }else if (pilihan==2){
-                userLoggedIn.getPaymentMethod().processPayment(userLoggedIn, order.getRestaurant(),order,(long) totalHarga);
+                if (userLoggedIn.getPaymentMethod() instanceof DebitPayment){
+                    userLoggedIn.getPaymentMethod().processPayment(userLoggedIn,order.getRestaurant(), order,(long) totalHarga);
+                } else{
+                    System.out.println("User belum memiliki metode pembayaran ini!\n");
+                }
             }else{
                 System.out.println("Pilihan tidak valid");
             }
@@ -172,12 +184,12 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
     }
 
-    public void handleCekSaldo(){
+    protected void handleCekSaldo(){
         // TODO: Implementasi method untuk handle ketika customer ingin update status pesanan
         System.out.println("Sisa saldo sebesar Rp" + userLoggedIn.getSaldo());
     }
 
-    public static Restaurant getRestaurantByName(String name){
+    protected Restaurant getRestaurantByName(String name){
         Optional<Restaurant> restaurantMatched = restoList.stream().filter(restoran -> restoran.getNama().toLowerCase().equals(name.toLowerCase())).findFirst();
         if(restaurantMatched.isPresent()){
             return restaurantMatched.get();
@@ -185,13 +197,13 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return null;
     }
 
-    public static boolean validateRequestPesanan(Restaurant restaurant, List<String> listMenuPesananRequest){
+    protected boolean validateRequestPesanan(Restaurant restaurant, List<String> listMenuPesananRequest){
         return listMenuPesananRequest.stream().allMatch(pesanan -> 
             restaurant.getMenu().stream().anyMatch(menu -> menu.getNamaMakanan().equals(pesanan))
         );
     }
 
-    public static Menu[] getMenuRequest(Restaurant restaurant, List<String> listMenuPesananRequest){
+    protected Menu[] getMenuRequest(Restaurant restaurant, List<String> listMenuPesananRequest){
         Menu[] menu = new Menu[listMenuPesananRequest.size()];
         for(int i=0;i<menu.length;i++){
             for(Menu existMenu : restaurant.getMenu()){
@@ -203,7 +215,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return menu;
     }
     
-    public static Order getOrderOrNull(String orderId) {
+    protected Order getOrderOrNull(String orderId) {
         for (User user : userList) {
             for (Order order : user.getOrderHistory()) {
                 if (order.getOrderId().equals(orderId)) {
@@ -214,7 +226,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return null;
     }
 
-    public static String outputBillPesanan(Order o) {
+    protected String outputBillPesanan(Order o) {
         String[] tempOrderedMenuItems = new String[o.getItems().length];
         String output = "bill:\n";
         int i = 0;
@@ -243,7 +255,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return output;
     }
 
-    public static String getMenuPesananOutput(Order order){
+    protected String getMenuPesananOutput(Order order){
         StringBuilder pesananBuilder = new StringBuilder();
         DecimalFormat decimalFormat = new DecimalFormat();
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
@@ -258,7 +270,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return pesananBuilder.toString();
     }
 
-    public static User getUser(String nama, String nomorTelepon){
+    protected User getUser(String nama, String nomorTelepon){
         for(User user: userList){
             if(user.getNama().equals(nama.trim()) && user.getNomorTelepon().equals(nomorTelepon.trim())){
                 return user;

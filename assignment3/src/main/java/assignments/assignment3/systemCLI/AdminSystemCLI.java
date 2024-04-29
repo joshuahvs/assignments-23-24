@@ -24,7 +24,7 @@ public class AdminSystemCLI extends UserSystemCLI{
 
     //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
     @Override
-    public boolean handleMenu(int command){
+    protected boolean handleMenu(int command){
         switch(command){
             case 1 -> handleTambahRestoran();
             case 2 -> handleHapusRestoran();
@@ -36,7 +36,7 @@ public class AdminSystemCLI extends UserSystemCLI{
 
     //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
     @Override
-    public void displayMenu() {
+    protected void displayMenu() {
         System.out.println("\n--------------------------------------------");
         System.out.println("Pilih menu:");
         System.out.println("1. Tambah Restoran");
@@ -89,7 +89,7 @@ public class AdminSystemCLI extends UserSystemCLI{
         }
     }
 
-    public static Restaurant handleTambahMenuRestaurant(Restaurant restoran){
+    protected Restaurant handleTambahMenuRestaurant(Restaurant restoran){
         System.out.print("Jumlah Makanan: ");
         int  jumlahMenu = Integer.parseInt(input.nextLine().trim());
         boolean isMenuValid = true;
@@ -115,7 +115,7 @@ public class AdminSystemCLI extends UserSystemCLI{
         return isMenuValid? restoran : null; 
     }
 
-    public static String getValidRestaurantName() {
+    protected String getValidRestaurantName() {
         String name = "";
         boolean isRestaurantNameValid = false;
     
@@ -140,7 +140,7 @@ public class AdminSystemCLI extends UserSystemCLI{
         return name;
     }
 
-    public static boolean checkIsDigit(String digits){
+    protected boolean checkIsDigit(String digits){
         return  digits.chars().allMatch(Character::isDigit);
     }
 }
