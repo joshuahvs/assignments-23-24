@@ -7,7 +7,7 @@ import java.util.Scanner;
 import assignments.assignment3.MainMenu;
 import assignments.assignment3.daritp2.*;;
 
-//TODO: Extends Abstract yang diberikan
+//Extends Abstract yang diberikan
 public class AdminSystemCLI extends UserSystemCLI{
     private static final Scanner input = new Scanner(System.in);
     static ArrayList<Restaurant> restoList = MainMenu.getRestoList(); 
@@ -22,7 +22,7 @@ public class AdminSystemCLI extends UserSystemCLI{
         }
     }
 
-    //Menambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
+    // Menambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
     @Override
     protected boolean handleMenu(int command){
         switch(command){
@@ -34,7 +34,7 @@ public class AdminSystemCLI extends UserSystemCLI{
         return true;
     }
 
-    //Menambahkan modifier dan membuat metode ini mengoverride dari Abstract class
+    // Menambahkan modifier dan membuat metode ini mengoverride dari Abstract class
     @Override
     protected void displayMenu() {
         System.out.println("\n--------------------------------------------");
@@ -46,7 +46,7 @@ public class AdminSystemCLI extends UserSystemCLI{
         System.out.print("Pilihan menu: ");
     }
 
-    //Mengimplementasi method untuk handle ketika admin ingin tambah restoran
+    // Mengimplementasi method untuk handle ketika admin ingin tambah restoran
     protected void handleTambahRestoran(){
         System.out.println("--------------Tambah Restoran---------------");
         Restaurant restaurant = null;
