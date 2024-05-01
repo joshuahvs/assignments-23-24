@@ -152,7 +152,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
             }
             if (order.getOrderFinished() == true){
                 System.out.println("Pesanan dengan ID ini sudah lunas!");
-                continue;
+                break;
             }
             double totalHarga = order.getTotalHarga();
             System.out.println("");
