@@ -1,21 +1,20 @@
+//Mengimport yang diperlukan
 package assignments.assignment3.daritp2;
-
 import java.util.ArrayList;
-
 import assignments.assignment3.payment.DepeFoodPaymentSystem;
 
 public class User {
-    
+    // Atribut untuk class user
     private String nama;
     private String nomorTelepon;
     private String email;
     private ArrayList<Order> orderHistory;
     public String role;
     private String lokasi;
-
     private DepeFoodPaymentSystem payment;
     private long saldo;
 
+    // constructor
     public User(String nama, String nomorTelepon, String email, String lokasi, String role, DepeFoodPaymentSystem payment, int saldo){
         this.nama = nama;
         this.nomorTelepon = nomorTelepon;
@@ -26,6 +25,7 @@ public class User {
         this.payment = payment;
         this.saldo = saldo;
     }
+    //GETTER DAN SETTER yang diperlukan
     public String getEmail() {
         return email;
     }
@@ -52,23 +52,19 @@ public class User {
         }
         return false;
     }
-
     public DepeFoodPaymentSystem getPaymentMethod(){
         return payment;
     }
-
     public long getSaldo(){
         return saldo;
     }
-
     public void  setSaldo(long saldo){
         this.saldo = saldo;
     }
 
-    
+    //method toString
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
         return String.format("User dengan nama %s dan nomor telepon %s", nama, nomorTelepon);
     }
 

@@ -1,20 +1,21 @@
+//Mengimport yang diperlukan
 package assignments.assignment3.daritp2;
-
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Restaurant {
+    //Atribut untuk restoran
     private String nama;
     private ArrayList<Menu> menu;
     private long saldo;
-
+    // constructor
     public Restaurant(String nama){
         this.nama = nama;
         this.menu = new ArrayList<>();
     }
-    
+    //GETTER dan SETTER
     public String getNama() {
         return nama;
     }
@@ -32,6 +33,7 @@ public class Restaurant {
         this.saldo = saldo;
     }
 
+    //Method untuk menyorting menu
     private ArrayList<Menu> sortMenu(){
         Menu[] menuArr = new Menu[menu.size()];
         for(int i=0; i < menu.size();i++){
@@ -50,6 +52,7 @@ public class Restaurant {
         }
         return new ArrayList<>(Arrays.asList(menuArr));
     }
+    //Method untuk print Menu
     public String printMenu() {
         StringBuilder menuString = new StringBuilder("Menu:\n");
         DecimalFormat decimalFormat = new DecimalFormat();

@@ -1,10 +1,7 @@
 package assignments.assignment3.daritp2;
 
-// import java.util.ArrayList;
-// import java.util.Arrays;
-
 public class Order {
-    
+    //Atribut yang diperlukan dari class order
     private String OrderId;
     private String tanggal;
     private int ongkir;
@@ -12,6 +9,7 @@ public class Order {
     private boolean orderFinished;
     private Menu[] items;
 
+    //constructor
     public Order(String orderId, String tanggal, int ongkir, Restaurant resto, Menu[] items){
         this.OrderId = orderId;
         this.tanggal = tanggal;
@@ -20,6 +18,7 @@ public class Order {
         this.orderFinished = false;
         this.items = items;
     }
+    //GETTER dan SETTER yang diperlukan
     public Restaurant getRestaurant() {
         return restaurant;
     }
@@ -48,6 +47,7 @@ public class Order {
             return "Not Finished";
         }
     }
+    // Method untuk menyorting menu
     public Menu[] getSortedMenu(){
         Menu[] menuArr = new Menu[getItems().length];
         for(int i=0; i < getItems().length;i++){
@@ -66,6 +66,8 @@ public class Order {
         }
         return menuArr;
     }
+
+    // Method untuk mendapatkan harga total
     public double getTotalHarga(){
         double sum = 0;
         for(Menu menu: getItems()){

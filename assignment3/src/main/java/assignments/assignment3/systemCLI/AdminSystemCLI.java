@@ -22,7 +22,7 @@ public class AdminSystemCLI extends UserSystemCLI{
         }
     }
 
-    //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
+    //Menambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
     @Override
     protected boolean handleMenu(int command){
         switch(command){
@@ -34,7 +34,7 @@ public class AdminSystemCLI extends UserSystemCLI{
         return true;
     }
 
-    //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
+    //Menambahkan modifier dan membuat metode ini mengoverride dari Abstract class
     @Override
     protected void displayMenu() {
         System.out.println("\n--------------------------------------------");
@@ -46,8 +46,8 @@ public class AdminSystemCLI extends UserSystemCLI{
         System.out.print("Pilihan menu: ");
     }
 
+    //Mengimplementasi method untuk handle ketika admin ingin tambah restoran
     protected void handleTambahRestoran(){
-        // TODO: Implementasi method untuk handle ketika admin ingin tambah restoran
         System.out.println("--------------Tambah Restoran---------------");
         Restaurant restaurant = null;
         while (restaurant == null) {
@@ -59,8 +59,8 @@ public class AdminSystemCLI extends UserSystemCLI{
         System.out.print("Restaurant "+restaurant.getNama()+" Berhasil terdaftar." );
     }
 
+    // Mengimplementasi method untuk handle ketika admin ingin menghapus restoran
     protected void handleHapusRestoran(){
-        // TODO: Implementasi method untuk handle ketika admin ingin tambah restoran
         System.out.println("--------------Hapus Restoran---------------");
         boolean allValid = false;
         while (allValid == false) {
@@ -89,6 +89,7 @@ public class AdminSystemCLI extends UserSystemCLI{
         }
     }
 
+    //Method untuk menambahkan restaurant (mengikuti TP2)
     protected Restaurant handleTambahMenuRestaurant(Restaurant restoran){
         System.out.print("Jumlah Makanan: ");
         int  jumlahMenu = Integer.parseInt(input.nextLine().trim());
@@ -115,6 +116,7 @@ public class AdminSystemCLI extends UserSystemCLI{
         return isMenuValid? restoran : null; 
     }
 
+    //Method untuk mendapatkan restoran dengan nama (Dari TP2)
     protected String getValidRestaurantName() {
         String name = "";
         boolean isRestaurantNameValid = false;
@@ -140,6 +142,7 @@ public class AdminSystemCLI extends UserSystemCLI{
         return name;
     }
 
+    // Method untuk mengecheck apakah character di string sebuah digit
     protected boolean checkIsDigit(String digits){
         return  digits.chars().allMatch(Character::isDigit);
     }
