@@ -1,8 +1,9 @@
 package assignments.assignment1;
 
 import java.util.Scanner;
-import java.time.*;
-import java.time.format.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+
 
 public class OrderGenerator {
     private static final Scanner input = new Scanner(System.in);
@@ -154,7 +155,7 @@ public class OrderGenerator {
                     } else {
                         System.out.print("Tanggal Pemesanan: ");
                         tanggalOrder = input.nextLine();
-                        boolean isValidDateFormat = isValidDateFormat(tanggalOrder);
+                        boolean isValidDateFormat = validateDate(tanggalOrder);
                         //jika format data tidak valid
                         if (isValidDateFormat == false) {
                             System.out.println("Tanggal Pemesanan dalam format DD/MM/YYYY!");
@@ -227,15 +228,36 @@ public class OrderGenerator {
         } while (option != 3);
         System.out.println("Terima kasih telah menggunakan DepeFood!");
     }
+    public static int calculateDeliveryCost(String location) {
+        switch (location) {
+            case "P":
+                return 10000;
+            case "U":
+                return 20000;
+            case "T":
+                return 35000;
+            case "S":
+                return 40000;
+            case "B":
+                return 60000;
+            default:
+                return 0;
+        }
+    }
     // method untuk memvalidasi format dari tanggal
-    public static boolean isValidDateFormat(String tanggalOrder) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); //format yang sesuai
-        try {
-            LocalDate.parse(tanggalOrder, formatter);
-            return true;
-        } catch (DateTimeParseException e) {
+    public static boolean validateDate(String tanggalOrder) {
+        String[] parts = tanggalOrder.split("/");
+        if (parts.length != 3) {
             return false;
-        } 
+        }
+
+        for (String part : parts) {
+            if (!part.chars().allMatch(Character::isDigit)) {
+                return false;
+            }
+        }
+
+        return parts[0].length() == 2 && parts[1].length() == 2 && parts[2].length() == 4;
     }
     // method untuk memvalidasi nomer telepon
     public static boolean isTelpValid(String noTelpon) {
