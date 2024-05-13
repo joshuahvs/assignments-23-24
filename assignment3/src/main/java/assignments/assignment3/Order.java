@@ -72,4 +72,12 @@ public class Order {
         }
         return sum += getOngkir();
     }
+
+    public String getStatusFull(){
+        if (orderFinished == true){
+            return "Finished";
+        }else{
+            return "Not Finished";
+        }
+    }
 }
