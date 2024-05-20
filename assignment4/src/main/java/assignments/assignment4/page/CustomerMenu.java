@@ -27,6 +27,7 @@ import assignments.assignment4.components.BillPrinter;
 import java.util.List;
 
 public class CustomerMenu extends MemberMenu {
+    //Atribut
     private Stage stage;
     private Scene scene;
     private Scene addOrderScene;
@@ -39,6 +40,7 @@ public class CustomerMenu extends MemberMenu {
     private List<Restaurant> restoList = AdminMenu.getRestaurants();
     private User user;
 
+    //Constructor
     public CustomerMenu(Stage stage, MainApp mainApp, User user) {
         this.stage = stage;
         this.mainApp = mainApp;
@@ -52,13 +54,14 @@ public class CustomerMenu extends MemberMenu {
         this.billPrinter = new BillPrinter(stage, mainApp, user);
     }
 
+    // Method untuk menampilkan menu untuk Customer
     @Override
     public Scene createBaseMenu() {
-        // TODO: Implementasikan method ini untuk menampilkan menu untuk Customer
-        initComboBox();
+        initComboBox(); //inisiasi combobox
         VBox menuLayout = new VBox(30);
         menuLayout.setStyle("-fx-background-color: black;");
 
+        //welcome text, button untuk buat pesanan, cetak bill, bayar bill, cek saldo, dan logout
         Text welcomeText = new Text("Welcome, " + user.getNama() + "!");
         welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 30));
         welcomeText.setFill(Color.WHITE);
@@ -85,7 +88,7 @@ public class CustomerMenu extends MemberMenu {
         logOutbtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         logOutbtn.setOnAction(e -> handleLogOut());
 
-        
+        //menambahkan effect pada button
         addFadeTransition(buatPesananbtn);
         addFadeTransition(cetakBillbtn);
         addFadeTransition(bayarBillbtn);
@@ -98,14 +101,16 @@ public class CustomerMenu extends MemberMenu {
         addHoverEffect(cekSaldobtn);
         addHoverEffect(logOutbtn);
 
+        //menambahkan semuanya ke menu layout
         menuLayout.getChildren().addAll(welcomeText, buatPesananbtn, cetakBillbtn, bayarBillbtn, cekSaldobtn, logOutbtn);
         menuLayout.setAlignment(Pos.CENTER);
-        
+        //menyimpan scene
         Scene customerScene = new Scene(menuLayout, 500, 600);
         mainApp.addScene("customerMenu", customerScene);
         return customerScene;
     }
 
+    //inisiasi restaurant combobox
     private void initComboBox() {
         restaurantComboBox.setPromptText("Select a restaurant");
         for (Restaurant resto : restoList) {
@@ -113,12 +118,12 @@ public class CustomerMenu extends MemberMenu {
         }
     }
 
+    // method untuk menampilkan page tambah pesanan
     private Scene createTambahPesananForm() {
-        // TODO: Implementasikan method ini untuk menampilkan page tambah pesanan
         VBox menuLayout = new VBox(10);
         menuLayout.setStyle("-fx-background-color: black;");
         menuLayout.setAlignment(Pos.CENTER);
-
+        //welcome teks, label restoran, label dan input tanggal, dan button untuk menampilkan menu
         Text welcomeText = new Text("Buat Pesanan");
         welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 20));
         welcomeText.setFill(Color.WHITE);
@@ -135,17 +140,18 @@ public class CustomerMenu extends MemberMenu {
         date.setMaxWidth(300);
         date.setPromptText("Enter date (DD/MM/YYYY)");
 
-
         Button menuBtn = new Button("Menu");
         Label menuLabel = new Label("Menu:");
         menuLabel.setTextFill(Color.WHITE);
 
+        //Menampilakn menulist jika button menu ditekan
         ListView<String> menuList = new ListView<>();
         menuList.setStyle("-fx-control-inner-background: black; -fx-text-fill: white;");
         menuBtn.setOnAction(e -> {
             refresh(menuList);
             String selectedRestaurantName = restaurantComboBox.getSelectionModel().getSelectedItem();
             Restaurant currentResto = null;
+            //cek apakah restoran sudah dipilih
             if (selectedRestaurantName != null) {
                 for (Restaurant resto : restoList) {
                     if (resto.getNama().equalsIgnoreCase(selectedRestaurantName)) {
@@ -153,6 +159,7 @@ public class CustomerMenu extends MemberMenu {
                         break;
                     }
                 }
+                //menambahkan menu ke menulist untuk ditampilkan
                 for (Menu menu : currentResto.getMenu()) {
                     menuList.getItems().add(menu.getNamaMakanan());
                 }
@@ -161,6 +168,7 @@ public class CustomerMenu extends MemberMenu {
             }
         });
 
+        //button buat pesanan yang akan handle buat pesanan
         Button buatPesananbtn = new Button("Buat Pesanan");
         menuList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         List<String> selectedMenuItems = menuList.getSelectionModel().getSelectedItems();
@@ -170,9 +178,11 @@ public class CustomerMenu extends MemberMenu {
         kembaliBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         kembaliBtn.setOnAction(e -> stage.setScene(scene));
 
+        //jika restoran yang dipilih berganti, menulist akan terrefresh otomatis
         restaurantComboBox.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> refresh(menuList));
 
+        //menambahkan effect
         addFadeTransition(restaurantLabel);
         addFadeTransition(restaurantComboBox);
         addFadeTransition(dateLabel);
@@ -193,11 +203,12 @@ public class CustomerMenu extends MemberMenu {
         return addOrderScene;
     }
 
+    // Method untuk menampilkan page cetak bill
     private Scene createBillPrinter() {
-        // TODO: Implementasikan method ini untuk menampilkan page cetak bill
         VBox menuLayout = new VBox(10);
         menuLayout.setStyle("-fx-background-color: black;");
 
+        //Teks welcome, label dan input orderId dan button untuk cetak bill
         Text welcomeText = new Text("Cetak Bill");
         welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 20));
         welcomeText.setFill(Color.WHITE);
@@ -210,6 +221,7 @@ public class CustomerMenu extends MemberMenu {
         TextField orderIdInput = new TextField();
         orderIdInput.setMaxWidth(300);
 
+        //akan memanggil method di billprinter untuk menampilkan bill jika button ditekan
         Button printBillbtn = new Button("Print Bill");
         printBillbtn.setOnAction(e->{
             String orderId = orderIdInput.getText();
@@ -220,6 +232,7 @@ public class CustomerMenu extends MemberMenu {
         kembaliBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         kembaliBtn.setOnAction(e -> stage.setScene(scene));
 
+        //menambahkan effect
         addFadeTransition(orderIDLabel);
         addFadeTransition(orderIdInput);
         addFadeTransition(printBillbtn);
@@ -234,11 +247,12 @@ public class CustomerMenu extends MemberMenu {
         return printBillScene;
     }
 
+    //Method untuk menampilkan page bayar bill
     private Scene createBayarBillForm() {
-        // TODO: Implementasikan method ini untuk menampilkan page bayar bill
         VBox menuLayout = new VBox(10);
         menuLayout.setStyle("-fx-background-color: black;");
 
+        //welcome text, input untuk orderid
         Text welcomeText = new Text("Bayar Bill");
         welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 20));
         welcomeText.setFill(Color.WHITE);
@@ -249,9 +263,11 @@ public class CustomerMenu extends MemberMenu {
         orderIDInput.setPromptText("Masukkan Order ID");
         orderIDInput.setMaxWidth(300);
 
+        //combobox piihan payment
         ComboBox<String> paymentBox = new ComboBox<>(FXCollections.observableArrayList("Credit Card", "Debit"));
         paymentBox.setPromptText("Pilih Opsi Pembayaran");
 
+        //memproses pembayaran jika button bayar ditekan
         Button bayarBtn = new Button("Bayar");
         bayarBtn.setOnAction(e -> {handleBayarBill(orderIDInput.getText(), paymentBox.getSelectionModel().getSelectedItem()); refresh(orderIDInput);});
 
@@ -263,7 +279,6 @@ public class CustomerMenu extends MemberMenu {
         addFadeTransition(paymentBox);
         addFadeTransition(bayarBtn);
         addFadeTransition(kembaliBtn);
-
         addHoverEffect(bayarBtn);
         addHoverEffect(kembaliBtn);
 
@@ -273,11 +288,11 @@ public class CustomerMenu extends MemberMenu {
         return payBillScene;
     }
 
+     // Method untuk menampilkan page cetak saldo
     private Scene createCekSaldoScene() {
-        // TODO: Implementasikan method ini untuk menampilkan page cetak saldo
         VBox menuLayout = new VBox(10);
         menuLayout.setStyle("-fx-background-color: black;");
-
+        //welcometext, teks nama user, dan saldo user, serta button untuk kembali
         Text welcomeText = new Text("Saldo User");
         welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 20));
         welcomeText.setFill(Color.WHITE);
@@ -296,25 +311,27 @@ public class CustomerMenu extends MemberMenu {
         menuLayout.getChildren().addAll(welcomeText, namaUser, saldoUser, kembaliBtn);
         menuLayout.setAlignment(Pos.CENTER);
 
+        //menambahkan effect
         addFadeTransition(namaUser);
         addFadeTransition(saldoUser);
         addFadeTransition(kembaliBtn);
         addHoverEffect(kembaliBtn);
-
-
         cekSaldoScene = new Scene(menuLayout, 500, 600);
         return cekSaldoScene;
     }
 
+     //method untuk validasi isian pesanan
     private void handleBuatPesanan(String namaRestoran, String tanggalPemesanan, List<String> menuItems) {
-        // TODO: Implementasi validasi isian pesanan
+        //jika tanggal tidak valid
         if (!OrderGenerator.validateDate(tanggalPemesanan)) {
             showAlert("Error", "Error", "Date is invalid", AlertType.ERROR);
             return;
+        //jika user tidak memilih menu
         } else if (menuItems.isEmpty()){
             showAlert("Error", "Error", "Please choose a menu", AlertType.ERROR);
             return;
         }
+        //mencari resto yang sesuai
         Restaurant currentResto = null;
         for (Restaurant resto : restoList) {
             if (resto.getNama().equalsIgnoreCase(namaRestoran)) {
@@ -323,6 +340,7 @@ public class CustomerMenu extends MemberMenu {
             }
         }
         try {
+            //membuat orderId, dan membuat ordernya lalu memasukkannya kedalam user orderhistory
             String orderId = OrderGenerator.generateOrderID(namaRestoran, tanggalPemesanan, user.getNomorTelepon());
             System.out.println(orderId);
             Order order = new Order(
@@ -333,13 +351,15 @@ public class CustomerMenu extends MemberMenu {
                     getMenuRequest(currentResto, menuItems));
             user.addOrderHistory(order);
             showAlert("Success", null, "Order dengan ID " + orderId + " berhasil ditambahkan" , AlertType.INFORMATION);
+        //jika terjadi error
         } catch (Exception e) {
             showAlert("Error", "Error", "Can not make an order!", AlertType.ERROR);
         }
     }
 
+    //method untuk validasi pembayaran
     private void handleBayarBill(String orderID, String pilihanPembayaran) {
-        // TODO: Implementasi validasi pembayaran
+        //jika user belum memilih pembayaran
         if (pilihanPembayaran == null) {
             showAlert("Error", "Invalid Payment Option", "Please select a payment option.", AlertType.ERROR);
             return;
@@ -351,16 +371,19 @@ public class CustomerMenu extends MemberMenu {
                 break;
             }
         }
+        //jika order tidak ditemukan
         if (founOrder==null){
             showAlert("Error", "Error", "Order cannot be found!", AlertType.ERROR);
             return;
         }
+        //jika order sudah dibayar
         if (founOrder.getOrderFinished()==true){
             showAlert("Error", "Error", "Order has been paid!", AlertType.ERROR);
             return;
         }
         try {
             if (pilihanPembayaran=="Credit Card"){
+                //mengecheck apakah user dapat membayar dengan metode ini, jika iya maka process pembayarannya dan set order selesai
                 if (user.getPaymentSystem() instanceof CreditCardPayment){
                     user.getPaymentSystem().processPayment(user.getSaldo(), (long) founOrder.getTotalHarga());
                     long transactionFee = (long)(founOrder.getTotalHarga()*0.02);
@@ -373,12 +396,13 @@ public class CustomerMenu extends MemberMenu {
                     showAlert("Error", "Invalid Payment Option", "User cannot pay with this method", AlertType.ERROR);
                 }
             } else{
+                //memproses pembayaran dan set order selesai jika metode pembayaran dimiliki user
                 if (user.getPaymentSystem() instanceof DebitPayment){
                     user.getPaymentSystem().processPayment(user.getSaldo(),(long)founOrder.getTotalHarga());
                     user.setSaldo((long)(user.getSaldo()-founOrder.getTotalHarga()));
                     founOrder.setOrderFinished(true);
                     showAlert("Success", null, "Berhasil Membayar Bill sebesar Rp " + founOrder.getTotalHarga(), AlertType.INFORMATION);
-                //Jika user memilih credit card tapi tidak sesuai dengan metode pembayaran yang dimiliki user
+                //Jika user memilih debit card tapi tidak sesuai dengan metode pembayaran yang dimiliki user
                 } else{
                     showAlert("Error", "Invalid Payment Option", "User cannot pay with this method", AlertType.ERROR);
                 }
@@ -388,6 +412,7 @@ public class CustomerMenu extends MemberMenu {
         }
     }
 
+    //Method untuk mendapatkan menu yang sesuai (dari SOLUSI)
     protected Menu[] getMenuRequest(Restaurant restaurant, List<String> listMenuPesananRequest) {
         Menu[] menu = new Menu[listMenuPesananRequest.size()];
         for (int i = 0; i < menu.length; i++) {
@@ -400,6 +425,7 @@ public class CustomerMenu extends MemberMenu {
         return menu;
     }
 
+    //method untuk kembali ke login page
     private void handleLogOut() {
         Scene loginScene = mainApp.getScene("Login");
         stage.setScene(loginScene);

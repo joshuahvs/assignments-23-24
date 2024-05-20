@@ -26,6 +26,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class AdminMenu extends MemberMenu {
+    //Atribut
     private Stage stage;
     private Scene scene;
     private User user;
@@ -33,9 +34,10 @@ public class AdminMenu extends MemberMenu {
     private Scene addMenuScene;
     private Scene viewRestaurantsScene;
     private static List<Restaurant> restoList = new ArrayList<>();
-    private MainApp mainApp; // Reference to MainApp instance
+    private MainApp mainApp; 
     private ListView<String> menuItemsListView = new ListView<>();
 
+    //constructor
     public AdminMenu(Stage stage, MainApp mainApp, User user) {
         this.stage = stage;
         this.mainApp = mainApp;
@@ -46,57 +48,68 @@ public class AdminMenu extends MemberMenu {
         this.viewRestaurantsScene = createViewRestaurantsForm();
     }
 
+    //Base menu yang akan ditampilkan pertama kali
     @Override
     public Scene createBaseMenu() {
         VBox menuLayout = new VBox(30);
         menuLayout.setStyle("-fx-background-color: black;");
 
+        //text welcome
         Text welcomeText = new Text("Welcome, " + user.getNama() + "!");
         welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 30));
         welcomeText.setFill(Color.WHITE);
         welcomeText.setTextAlignment(TextAlignment.CENTER);
         addShadow(welcomeText);
 
+        //button untuk tambah restoran
         Button tambahRestoranbtn = new Button("Tambah Restoran");
         tambahRestoranbtn.setStyle("-fx-background-color: white; -fx-text-fill: black;");
         tambahRestoranbtn.setOnAction(e -> stage.setScene(createAddRestaurantForm()));
 
+        //button untuk tambah menu restoran
         Button tambahMenuRestoranbtn = new Button("Tambah Menu Restoran");
         tambahMenuRestoranbtn.setStyle("-fx-background-color: white; -fx-text-fill: black;");
         tambahMenuRestoranbtn.setOnAction(e -> stage.setScene(createAddMenuForm()));
 
+        //button untuk lihat daftar menu restoran
         Button lihatDaftarRestoranbtn = new Button("Lihat Daftar Restoran");
         tambahMenuRestoranbtn.setStyle("-fx-background-color: white; -fx-text-fill: black;");
         lihatDaftarRestoranbtn.setOnAction(e -> stage.setScene(createViewRestaurantsForm()));
 
+        //button untuk log out
         Button logOutbtn = new Button("Log Out");
         logOutbtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         logOutbtn.setOnAction(e -> handleLogOut());
 
-        // Create fade transitions for each button
+        // menambahkan transisi effect pada button
         addFadeTransition(tambahRestoranbtn);
         addFadeTransition(tambahMenuRestoranbtn);
         addFadeTransition(lihatDaftarRestoranbtn);
         addFadeTransition(logOutbtn);
 
+        //menambahkan hovereffect pada button
         addHoverEffect(tambahRestoranbtn);
         addHoverEffect(tambahMenuRestoranbtn);
         addHoverEffect(lihatDaftarRestoranbtn);
         addHoverEffect(logOutbtn);
 
+
+        //menambahkan button dan teks ke menu layout
         menuLayout.getChildren().addAll(welcomeText, tambahRestoranbtn, tambahMenuRestoranbtn, lihatDaftarRestoranbtn,
                 logOutbtn);
         menuLayout.setAlignment(Pos.CENTER);
 
+        //menyimpan scene
         mainApp.addScene("adminMenu", scene);
         return new Scene(menuLayout, 500, 600);
     }
 
+    //Method untuk menampilkan page tambah restoran
     private Scene createAddRestaurantForm() {
-        // TODO: Implementasikan method ini untuk menampilkan page tambah restoran
         VBox layout = new VBox(10);
         layout.setStyle("-fx-background-color: black;");
 
+        //Text welcome, label dan input restoran, dan button sumbit serta kembali
         Text welcomeText = new Text("Tambahkan Restoran!");
         welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 20));
         welcomeText.setFill(Color.WHITE);
@@ -116,6 +129,7 @@ public class AdminMenu extends MemberMenu {
         exit.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         exit.setOnAction(e -> stage.setScene(scene));
 
+        //Menambahkan effect fade, dan hover untuk button
         addFadeTransition(restaurantLabel);
         addFadeTransition(restaurantNameInput);
         addFadeTransition(submit);
@@ -129,11 +143,12 @@ public class AdminMenu extends MemberMenu {
         return addRestaurantScene;
     }
 
+     // Method untuk menampilkan page tambah menu restoran
     private Scene createAddMenuForm() {
-        // TODO: Implementasikan method ini untuk menampilkan page tambah menu restoran
         VBox layout = new VBox(10);
         layout.setStyle("-fx-background-color: black;");
 
+        //Welcome teks, label dan input restoran, label dan input menu, label dan input harga
         Text welcomeText = new Text("Tambahkan Menu!");
         welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 20));
         welcomeText.setFill(Color.WHITE);
@@ -155,6 +170,7 @@ public class AdminMenu extends MemberMenu {
         TextField priceInput = new TextField();
         priceInput.setMaxWidth(300);
 
+        //Button tambah menu dan exit
         Button addMenuBtn = new Button("Add Menu Item");
         addMenuBtn.setOnAction(e -> {handleTambahMenuRestoran(restaurantNameInput.getText(), itemNameInput.getText(),
                 priceInput.getText()); refresh(priceInput); refresh(itemNameInput);});
@@ -163,10 +179,7 @@ public class AdminMenu extends MemberMenu {
         exit.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         exit.setOnAction(e -> stage.setScene(scene));
 
-        layout.getChildren().addAll(welcomeText, restaurantLabel, restaurantNameInput, menuLabel, itemNameInput,
-                priceLabel, priceInput, addMenuBtn, exit);
-        layout.setAlignment(Pos.CENTER);
-
+        //menambahkan transisi, dan 
         addFadeTransition(restaurantLabel);
         addFadeTransition(restaurantNameInput);
         addFadeTransition(menuLabel);
@@ -176,18 +189,24 @@ public class AdminMenu extends MemberMenu {
         addFadeTransition(addMenuBtn);
         addFadeTransition(exit);
         addHoverEffect(addMenuBtn);
-        addHoverEffect(exit);;
+        addHoverEffect(exit);
+
+        //Menambahkan semuanya
+        layout.getChildren().addAll(welcomeText, restaurantLabel, restaurantNameInput, menuLabel, itemNameInput,
+                priceLabel, priceInput, addMenuBtn, exit);
+        layout.setAlignment(Pos.CENTER);
 
         addMenuScene = new Scene(layout, 500, 600);
         return addMenuScene;
     }
 
+    //Method untuk menampilkan page daftar restoran
     private Scene createViewRestaurantsForm() {
-        // TODO: Implementasikan method ini untuk menampilkan page daftar restoran
         VBox layout = new VBox(10);
         layout.setStyle("-fx-background-color: black;");
         layout.setAlignment(Pos.CENTER);
 
+        //Welcome teks, label dan input restoran dan search button
         Text welcomeText = new Text("Melihat Restoran Terdaftar");
         welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 20));
         welcomeText.setFill(Color.WHITE);
@@ -204,6 +223,7 @@ public class AdminMenu extends MemberMenu {
 
         restaurantNameInput.setPromptText("Enter restaurant name to view menu");
         Button searchBtn = new Button("Search");
+        //Mengiterasi restoran yang sesuai, dan menambahkan menunya ke dalam list results
         searchBtn.setOnAction(e -> {
             String restoName = restaurantNameInput.getText();
             Restaurant currentResto = null;
@@ -213,6 +233,7 @@ public class AdminMenu extends MemberMenu {
                     break;
                 }
             }
+            //results yang akan ditampilkan
             List<String> results = new ArrayList<>();
             if (currentResto != null) {
                 for (Menu menu : currentResto.getMenu()) {
@@ -220,26 +241,26 @@ public class AdminMenu extends MemberMenu {
                     results.add(menuToShow);
                 }
 
-                // Sort the results by price, and then alphabetically by menu name
+                // Sorting list results
                 Collections.sort(results, new Comparator<String>() {
                     @Override
                     public int compare(String o1, String o2) {
-                        // Extract the prices from the strings
                         String[] parts1 = o1.split(" - ");
                         String[] parts2 = o2.split(" - ");
                         double price1 = Double.parseDouble(parts1[1]);
                         double price2 = Double.parseDouble(parts2[1]);
 
-                        // First compare by price
+                        // compare dari harga
                         int priceComparison = Double.compare(price1, price2);
                         if (priceComparison != 0) {
                             return priceComparison;
                         }
 
-                        // If prices are the same, compare alphabetically by name
+                       //compare secara alphabetical
                         return parts1[0].compareTo(parts2[0]);
                     }
                 });
+                //set items
                 menuItemsListView.setItems(FXCollections.observableArrayList(results));
             } else {
                 showAlert("Error", "Error", "Restaurant not found!", AlertType.ERROR);
@@ -251,6 +272,7 @@ public class AdminMenu extends MemberMenu {
         kembaliBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         kembaliBtn.setOnAction(e -> {stage.setScene(scene); refresh(menuItemsListView);});
 
+        //menambahkan effect
         addFadeTransition(restaurantLabel);
         addFadeTransition(restaurantNameInput);
         addFadeTransition(searchBtn);
@@ -258,6 +280,7 @@ public class AdminMenu extends MemberMenu {
         addHoverEffect(searchBtn);
         addHoverEffect(kembaliBtn);
 
+        //menambahkan semuanya ke layout
         layout.getChildren().addAll(welcomeText, restaurantLabel, restaurantNameInput, searchBtn, menuLabel,
                 menuItemsListView, kembaliBtn);
         viewRestaurantsScene = new Scene(layout, 500, 620);
@@ -265,8 +288,9 @@ public class AdminMenu extends MemberMenu {
         return viewRestaurantsScene;
     }
 
+    //method untuk validasi nama restoran
     private void handleTambahRestoran(String nama) {
-        // TODO: Implementasi validasi isian nama Restoran
+        // Menambahkan restoran jika valid dan menampilkan pesan yang sesuai
         String validName = getValidRestaurantName(nama);
         if (validName != null) {
             Restaurant resto = new Restaurant(nama);
@@ -277,35 +301,40 @@ public class AdminMenu extends MemberMenu {
         }
     }
 
+    //Method untuk menambahkan menu ke restoran
     private void handleTambahMenuRestoran(String restaurant, String itemName, String price) {
-        // pricenya harusnya double !!!
-        // TODO: Implementasi validasi isian menu Restoran
         double harga;
+        //cek apakah harganya angka 
         try {
             harga = Double.parseDouble(price);
         } catch (Exception e) {
             showAlert("Error", null, "Price must be a number", AlertType.ERROR);
             return;
         }
+        //cek apakah restorannya tersedia
         Restaurant currentResto = null;
         for (Restaurant resto : restoList) {
             if (resto.getNama().equalsIgnoreCase(restaurant)) {
                 currentResto = resto;
             }
         }
+        //jika restoran tersedia
         if (currentResto != null) {
             currentResto.addMenu(new Menu(itemName, harga));
             showAlert("Message", "Message", "Menu item added successfully", AlertType.INFORMATION);
+        //jika restoran tidak tersedia
         } else {
             showAlert("Error", "Error", "Restaurant not found!", AlertType.ERROR);
         }
     }
 
+    //method untuk kembali ke login page
     private void handleLogOut() {
         Scene loginScene = mainApp.getScene("Login");
         stage.setScene(loginScene);
     }
 
+    //method untuk mengechek apakah nama restoran valid
     public static String getValidRestaurantName(String inputName) {
         String name = "";
         boolean isRestaurantNameValid = false;
@@ -327,6 +356,7 @@ public class AdminMenu extends MemberMenu {
         return name;
     }
 
+    //GETTER
     public static List<Restaurant> getRestaurants() {
         return restoList;
     }

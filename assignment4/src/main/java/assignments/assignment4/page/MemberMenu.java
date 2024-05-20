@@ -20,6 +20,7 @@ public abstract class MemberMenu {
 
     abstract protected Scene createBaseMenu();
 
+    //method untuk menampilkan alert
     protected void showAlert(String title, String header, String content, Alert.AlertType c){
         Alert alert = new Alert(c);
         alert.setTitle(title);
@@ -28,6 +29,7 @@ public abstract class MemberMenu {
         alert.showAndWait();
     }
 
+    //method untuk menambahkan effect fade untuk button
     protected void addFadeTransition(Button button) {
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.4), button);
         fadeTransition.setFromValue(0);
@@ -35,6 +37,7 @@ public abstract class MemberMenu {
         fadeTransition.setCycleCount(1);
         fadeTransition.play();
     }
+     //method untuk menambahkan effect fade untuk text
     protected void addFadeTransition(Text text) {
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.4), text);
         fadeTransition.setFromValue(0);
@@ -42,6 +45,7 @@ public abstract class MemberMenu {
         fadeTransition.setCycleCount(1);
         fadeTransition.play();
     }
+     //method untuk menambahkan effect fade untuk label
     protected void addFadeTransition(Label label) {
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.4), label);
         fadeTransition.setFromValue(0);
@@ -49,6 +53,7 @@ public abstract class MemberMenu {
         fadeTransition.setCycleCount(1);
         fadeTransition.play();
     }
+     //method untuk menambahkan effect fade untuk teksfield
     protected void addFadeTransition(TextField textField) {
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.4), textField);
         fadeTransition.setFromValue(0);
@@ -56,6 +61,7 @@ public abstract class MemberMenu {
         fadeTransition.setCycleCount(1);
         fadeTransition.play();
     }
+     //method untuk menambahkan effect fade untuk combobox
     protected void addFadeTransition(ComboBox<String> box) {
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.4), box);
         fadeTransition.setFromValue(0);
@@ -64,14 +70,15 @@ public abstract class MemberMenu {
         fadeTransition.play();
     }
 
+    //method untuk menambahkan shadow dan animasi ke teks
     protected void addShadow(Text text){
-        // Adding drop shadow effect to the welcome text
+        // menambahkan dropshadow ke teks
         DropShadow dropShadow = new DropShadow();
         dropShadow.setColor(Color.ANTIQUEWHITE);
         dropShadow.setRadius(20);
         text.setEffect(dropShadow);
 
-        // Animation for the drop shadow effect
+        // menambahkan animasi ke teks
         ScaleTransition shadowTransition = new ScaleTransition(Duration.seconds(2), text);
         shadowTransition.setFromX(1.0);
         shadowTransition.setToX(1.05);
@@ -82,6 +89,7 @@ public abstract class MemberMenu {
         shadowTransition.play();
     }
 
+    //method untuk menambahkan hover effect
     protected void addHoverEffect(Button button) {
         button.setOnMouseEntered(e -> {
             button.setScaleX(1.15);
@@ -103,14 +111,12 @@ public abstract class MemberMenu {
         return this.scene;
     }
 
+    //refresh input dari menulist
     protected void refresh(ListView<String> menuList){
-        //TODO: Implemenetasi method ini untuk merefresh data yang dimiliki aplikasi
-        // Hint: Method ini digunakan pada *seluruh method* yang membutuhkan update
         menuList.getItems().clear();
     }
+    //refresh input dari textfield
     protected void refresh(TextField textField){
-        //TODO: Implemenetasi method ini untuk merefresh data yang dimiliki aplikasi
-        // Hint: Method ini digunakan pada *seluruh method* yang membutuhkan update
         textField.clear();
     }
 

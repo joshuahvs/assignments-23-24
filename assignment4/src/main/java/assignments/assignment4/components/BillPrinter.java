@@ -22,67 +22,62 @@ import assignments.assignment3.User;
 import assignments.assignment4.MainApp;
 
 public class BillPrinter {
+    //atribut
     private Stage stage;
     private MainApp mainApp;
     private User user;
     private String orderId;
     private Order orderToPrint = null;
 
+    //constructor
     public BillPrinter(Stage stage, MainApp mainApp, User user) {
         this.stage = stage;
         this.mainApp = mainApp;
         this.user = user;
     }
-
+    // method untuk menampilkan komponen hasil cetak bill
     private Scene createBillPrinterForm() {
-    // Implementasi untuk menampilkan komponen hasil cetak bill
         VBox layout = new VBox(10);
         layout.setStyle("-fx-background-color: black;");
         layout.setPadding(new Insets(10));
         layout.setAlignment(Pos.CENTER);
 
+        //Memvalidasi bill
         printBill(orderId);
+        //Menampilkan bill berdasarkan hasil validasi
         if (orderToPrint != null) {
+            //Menambahkan teks
             Text billText = new Text("Bill");
             billText.setFont(Font.font(billText.getFont().getName(), FontWeight.BOLD, 30)); 
             billText.setFill(Color.WHITE);
             billText.setTextAlignment(TextAlignment.CENTER);
+            addShadow(billText);
 
-            // Adding drop shadow effect to the welcome text
-            DropShadow dropShadow = new DropShadow();
-            dropShadow.setColor(Color.ANTIQUEWHITE);
-            dropShadow.setRadius(20);
-            billText.setEffect(dropShadow);
-
-            // Animation for the drop shadow effect
-            ScaleTransition shadowTransition = new ScaleTransition(Duration.seconds(2), billText);
-            shadowTransition.setFromX(1.0);
-            shadowTransition.setToX(1.05);
-            shadowTransition.setFromY(1.0);
-            shadowTransition.setToY(1.05);
-            shadowTransition.setAutoReverse(true);
-            shadowTransition.setCycleCount(Timeline.INDEFINITE);
-            shadowTransition.play();
-
+            //Teks orderId
             Text orderText = new Text("Order ID: " + orderId);
             styleText(orderText);
             applyTypingTransition(orderText);
 
+            //Teks nama restoran
             Text restaurantText = new Text("Restaurant: " + orderToPrint.getRestaurant().getNama());
             styleText(restaurantText);
             applyTypingTransition(restaurantText);
 
+            //text lokasi pengiriman
             Text lokasiText = new Text("Lokasi Pengiriman: " + user.getLokasi());
             styleText(lokasiText);
             applyTypingTransition(lokasiText);
 
+            //teks status pengiriman
             Text statusText = new Text("Status Pengiriman: " + orderToPrint.getStatusFull());
             styleText(statusText);
             applyTypingTransition(statusText);
 
+            //label pesanan
             Label pesananLabel = new Label("Pesanan:");
             styleLabel(pesananLabel);
 
+            //Mengiterasi menu yang di order untuk ditampilkan
             VBox menuList = new VBox(5);
             menuList.setAlignment(Pos.CENTER);
             for (Menu menu : orderToPrint.getSortedMenu()) {
@@ -92,20 +87,25 @@ public class BillPrinter {
                 menuList.getChildren().add(menuText);
             }
 
+            //teks biaya ongkir
             Text biayaText = new Text("Biaya Ongkos Kirim: Rp " + orderToPrint.getOngkir());
             styleText(biayaText);
             applyTypingTransition(biayaText);
 
+            //teks total biaya
             Text totalBiayaText = new Text("Total Biaya: Rp " + orderToPrint.getTotalHarga());
             styleText(totalBiayaText);
             applyTypingTransition(totalBiayaText);
 
+            //button untuk kembali
             Button kembaliBtn = new Button("Kembali");
             kembaliBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
             kembaliBtn.setOnAction(e -> stage.setScene(mainApp.getScene("customerMenu")));
             addHoverEffect(kembaliBtn);
 
+            //Menambahkan semuanya
             layout.getChildren().addAll(billText, orderText, restaurantText, lokasiText, statusText, pesananLabel, menuList, biayaText, totalBiayaText, kembaliBtn);
+        //JIka orderId tidak valid maka akan menampilkan teks warning
         } else {
             Text warning = new Text("Please Enter Valid Order ID");
             warning.setFill(Color.RED);
@@ -123,18 +123,21 @@ public class BillPrinter {
         return new Scene(layout, 500, 600);
     }
 
+    //Method untuk styling label
     private void styleLabel(Label label) {
         label.setTextFill(Color.WHITE);
         label.setFont(Font.font(label.getFont().getName(), FontWeight.NORMAL, 14));
     }
 
+    //Method untuk styling teks
     private void styleText(Text text) {
         text.setFill(Color.WHITE);
         text.setFont(Font.font(text.getFont().getName(), FontWeight.NORMAL, 14));
     }
 
+    //Method untuk validasi orderID
     private void printBill(String orderId) {
-        //TODO: Implementasi validasi orderID
+        //Mengecheck apakah orderId ada di user order history
         boolean orderIdValid = false;
         for (Order order: user.getOrderHistory()){
             if (orderId.equals(order.getOrderId())){
@@ -143,6 +146,7 @@ public class BillPrinter {
                 break;
             }
         }
+        //jika tidak ada
         if (!orderIdValid) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -153,11 +157,13 @@ public class BillPrinter {
         }
     }
 
+    //Mendapatkan scene, dan mengatur orderId yang akan di check
     public Scene getScene(String orderID) {
         this.orderId = orderID;
         return this.createBillPrinterForm();
     }
 
+    //Method untuk transisi teks
     private void applyTypingTransition(Text text) {
         String content = text.getText();
         text.setText("");
@@ -170,14 +176,15 @@ public class BillPrinter {
         timeline.play();
     }
 
+    //Method untuk menambahkan shadow dan animasi
     protected void addShadow(Text text){
-        // Adding drop shadow effect to the welcome text
+        //menambahkan shadow pada teks
         DropShadow dropShadow = new DropShadow();
         dropShadow.setColor(Color.ANTIQUEWHITE);
         dropShadow.setRadius(20);
         text.setEffect(dropShadow);
 
-        // Animation for the drop shadow effect
+        // menambahkan animasi pada teks
         ScaleTransition shadowTransition = new ScaleTransition(Duration.seconds(2), text);
         shadowTransition.setFromX(1.0);
         shadowTransition.setToX(1.05);
@@ -188,6 +195,7 @@ public class BillPrinter {
         shadowTransition.play();
     }
 
+    //Method untuk hover effect
     protected void addHoverEffect(Button button) {
         button.setOnMouseEntered(e -> {
             button.setScaleX(1.15);
