@@ -296,8 +296,6 @@ public class AdminMenu extends MemberMenu {
             Restaurant resto = new Restaurant(nama);
             restoList.add(resto);
             showAlert("Message", "Message", "Restaurant successfully registered!", AlertType.INFORMATION);
-        } else {
-            showAlert("Error", null, "Restaurant cannot be registered!", AlertType.ERROR);
         }
     }
 
@@ -335,7 +333,7 @@ public class AdminMenu extends MemberMenu {
     }
 
     //method untuk mengechek apakah nama restoran valid
-    public static String getValidRestaurantName(String inputName) {
+    public String getValidRestaurantName(String inputName) {
         String name = "";
         boolean isRestaurantNameValid = false;
 
@@ -345,8 +343,10 @@ public class AdminMenu extends MemberMenu {
                     .anyMatch(restoran -> restoran.getNama().toLowerCase().equals(inputName.toLowerCase()));
             boolean isRestaurantNameLengthValid = inputName.length() >= 4;
             if (isRestaurantExist) {
+                showAlert("Error", null, "Restaurant already registered!", AlertType.ERROR);
                 return null;
             } else if (!isRestaurantNameLengthValid) {
+                showAlert("Error", null, "Restaurant name must be more than 4 letter", AlertType.ERROR);
                 return null;
             } else {
                 name = inputName;
