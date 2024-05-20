@@ -7,7 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import assignments.assignment1.OrderGenerator;
 // import assignments.assignment3.DepeFood;
@@ -20,10 +24,7 @@ import assignments.assignment3.payment.DebitPayment;
 import assignments.assignment4.MainApp;
 import assignments.assignment4.components.BillPrinter;
 
-// import java.util.ArrayList;
-// import java.util.Arrays;
 import java.util.List;
-// import java.util.stream.Collectors;
 
 public class CustomerMenu extends MemberMenu {
     private Stage stage;
@@ -34,7 +35,6 @@ public class CustomerMenu extends MemberMenu {
     private Scene cekSaldoScene;
     private BillPrinter billPrinter; // Instance of BillPrinter
     private ComboBox<String> restaurantComboBox = new ComboBox<>();
-    private static Label label = new Label();
     private MainApp mainApp;
     private List<Restaurant> restoList = AdminMenu.getRestaurants();
     private User user;
@@ -56,27 +56,52 @@ public class CustomerMenu extends MemberMenu {
     public Scene createBaseMenu() {
         // TODO: Implementasikan method ini untuk menampilkan menu untuk Customer
         initComboBox();
-        VBox menuLayout = new VBox(10);
+        VBox menuLayout = new VBox(30);
+        menuLayout.setStyle("-fx-background-color: black;");
+
+        Text welcomeText = new Text("Welcome, " + user.getNama() + "!");
+        welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 30));
+        welcomeText.setFill(Color.WHITE);
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        addShadow(welcomeText);
 
         Button buatPesananbtn = new Button("Buat Pesanan");
+        buatPesananbtn.setStyle("-fx-background-color: white; -fx-text-fill: black;");
         buatPesananbtn.setOnAction(e -> stage.setScene(createTambahPesananForm()));
 
         Button cetakBillbtn = new Button("Cetak Bill");
+        cetakBillbtn.setStyle("-fx-background-color: white; -fx-text-fill: black;");
         cetakBillbtn.setOnAction(e -> stage.setScene(createBillPrinter()));
 
         Button bayarBillbtn = new Button("Bayar Bill");
+        bayarBillbtn.setStyle("-fx-background-color: white; -fx-text-fill: black;");
         bayarBillbtn.setOnAction(e -> stage.setScene(createBayarBillForm()));
 
         Button cekSaldobtn = new Button("Cek Saldo");
+        cekSaldobtn.setStyle("-fx-background-color: white; -fx-text-fill: black;");
         cekSaldobtn.setOnAction(e -> stage.setScene(createCekSaldoScene()));
 
         Button logOutbtn = new Button("Log Out");
+        logOutbtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         logOutbtn.setOnAction(e -> handleLogOut());
 
-        menuLayout.getChildren().addAll(buatPesananbtn, cetakBillbtn, bayarBillbtn, cekSaldobtn, logOutbtn);
+        
+        addFadeTransition(buatPesananbtn);
+        addFadeTransition(cetakBillbtn);
+        addFadeTransition(bayarBillbtn);
+        addFadeTransition(cekSaldobtn);
+        addFadeTransition(logOutbtn);
+
+        addHoverEffect(buatPesananbtn);
+        addHoverEffect(cetakBillbtn);
+        addHoverEffect(bayarBillbtn);
+        addHoverEffect(cekSaldobtn);
+        addHoverEffect(logOutbtn);
+
+        menuLayout.getChildren().addAll(welcomeText, buatPesananbtn, cetakBillbtn, bayarBillbtn, cekSaldobtn, logOutbtn);
         menuLayout.setAlignment(Pos.CENTER);
         
-        Scene customerScene = new Scene(menuLayout, 400, 600);
+        Scene customerScene = new Scene(menuLayout, 500, 600);
         mainApp.addScene("customerMenu", customerScene);
         return customerScene;
     }
@@ -91,16 +116,34 @@ public class CustomerMenu extends MemberMenu {
     private Scene createTambahPesananForm() {
         // TODO: Implementasikan method ini untuk menampilkan page tambah pesanan
         VBox menuLayout = new VBox(10);
+        menuLayout.setStyle("-fx-background-color: black;");
         menuLayout.setAlignment(Pos.CENTER);
+
+        Text welcomeText = new Text("Buat Pesanan");
+        welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 20));
+        welcomeText.setFill(Color.WHITE);
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        addShadow(welcomeText);
+
         Label restaurantLabel = new Label("Restaurant:");
+        restaurantLabel.setTextFill(Color.WHITE);
+
         Label dateLabel = new Label("Date (DD/MM/YYYY):");
+        dateLabel.setTextFill(Color.WHITE);
+
         TextField date = new TextField();
+        date.setMaxWidth(300);
         date.setPromptText("Enter date (DD/MM/YYYY)");
+
+
         Button menuBtn = new Button("Menu");
         Label menuLabel = new Label("Menu:");
+        menuLabel.setTextFill(Color.WHITE);
 
         ListView<String> menuList = new ListView<>();
+        menuList.setStyle("-fx-control-inner-background: black; -fx-text-fill: white;");
         menuBtn.setOnAction(e -> {
+            refresh(menuList);
             String selectedRestaurantName = restaurantComboBox.getSelectionModel().getSelectedItem();
             Restaurant currentResto = null;
             if (selectedRestaurantName != null) {
@@ -110,8 +153,6 @@ public class CustomerMenu extends MemberMenu {
                         break;
                     }
                 }
-                // Clear previous menu items
-                menuList.getItems().clear();
                 for (Menu menu : currentResto.getMenu()) {
                     menuList.getItems().add(menu.getNamaMakanan());
                 }
@@ -123,69 +164,145 @@ public class CustomerMenu extends MemberMenu {
         Button buatPesananbtn = new Button("Buat Pesanan");
         menuList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         List<String> selectedMenuItems = menuList.getSelectionModel().getSelectedItems();
-        buatPesananbtn.setOnAction(e -> handleBuatPesanan(restaurantComboBox.getSelectionModel().getSelectedItem(), date.getText(), selectedMenuItems));
+        buatPesananbtn.setOnAction(e -> {handleBuatPesanan(restaurantComboBox.getSelectionModel().getSelectedItem(), date.getText(), selectedMenuItems);refresh(date);refresh(menuList);});
+
         Button kembaliBtn = new Button("Kembali");
+        kembaliBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         kembaliBtn.setOnAction(e -> stage.setScene(scene));
 
-        menuLayout.getChildren().addAll(restaurantLabel, restaurantComboBox, dateLabel, date, menuBtn, menuLabel,
+        restaurantComboBox.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> refresh(menuList));
+
+        addFadeTransition(restaurantLabel);
+        addFadeTransition(restaurantComboBox);
+        addFadeTransition(dateLabel);
+        addFadeTransition(date);
+        addFadeTransition(menuLabel);
+        addFadeTransition(menuBtn);
+        addFadeTransition(buatPesananbtn);
+        addFadeTransition(kembaliBtn);
+
+        addHoverEffect(menuBtn);
+        addHoverEffect(buatPesananbtn);
+        addHoverEffect(kembaliBtn);
+
+        menuLayout.getChildren().addAll(welcomeText,restaurantLabel, restaurantComboBox, dateLabel, date, menuBtn, menuLabel,
                 menuList,buatPesananbtn, kembaliBtn);
 
-        addOrderScene = new Scene(menuLayout, 400, 600);
+        addOrderScene = new Scene(menuLayout, 500, 600);
         return addOrderScene;
     }
 
     private Scene createBillPrinter() {
         // TODO: Implementasikan method ini untuk menampilkan page cetak bill
         VBox menuLayout = new VBox(10);
+        menuLayout.setStyle("-fx-background-color: black;");
+
+        Text welcomeText = new Text("Cetak Bill");
+        welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 20));
+        welcomeText.setFill(Color.WHITE);
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        addShadow(welcomeText);
+
+        Label orderIDLabel = new Label("Restaurant:");
+        orderIDLabel.setTextFill(Color.WHITE);
+
         TextField orderIdInput = new TextField();
+        orderIdInput.setMaxWidth(300);
+
         Button printBillbtn = new Button("Print Bill");
         printBillbtn.setOnAction(e->{
             String orderId = orderIdInput.getText();
             stage.setScene(billPrinter.getScene(orderId));
+            refresh(orderIdInput);
         });
         Button kembaliBtn = new Button("Kembali");
+        kembaliBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         kembaliBtn.setOnAction(e -> stage.setScene(scene));
+
+        addFadeTransition(orderIDLabel);
+        addFadeTransition(orderIdInput);
+        addFadeTransition(printBillbtn);
+        addFadeTransition(kembaliBtn);
+
+        addHoverEffect(printBillbtn);
+        addHoverEffect(kembaliBtn);
         
-        menuLayout.getChildren().addAll(orderIdInput, printBillbtn, kembaliBtn);
+        menuLayout.getChildren().addAll(welcomeText,orderIDLabel,orderIdInput, printBillbtn, kembaliBtn);
         menuLayout.setAlignment(Pos.CENTER);
-        printBillScene = new Scene(menuLayout, 400,600);
+        printBillScene = new Scene(menuLayout, 500,600);
         return printBillScene;
     }
 
     private Scene createBayarBillForm() {
         // TODO: Implementasikan method ini untuk menampilkan page bayar bill
         VBox menuLayout = new VBox(10);
+        menuLayout.setStyle("-fx-background-color: black;");
+
+        Text welcomeText = new Text("Bayar Bill");
+        welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 20));
+        welcomeText.setFill(Color.WHITE);
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        addShadow(welcomeText);
+
         TextField orderIDInput = new TextField();
         orderIDInput.setPromptText("Masukkan Order ID");
+        orderIDInput.setMaxWidth(300);
+
         ComboBox<String> paymentBox = new ComboBox<>(FXCollections.observableArrayList("Credit Card", "Debit"));
         paymentBox.setPromptText("Pilih Opsi Pembayaran");
 
         Button bayarBtn = new Button("Bayar");
-        bayarBtn.setOnAction(e -> handleBayarBill(orderIDInput.getText(), paymentBox.getSelectionModel().getSelectedItem()));
+        bayarBtn.setOnAction(e -> {handleBayarBill(orderIDInput.getText(), paymentBox.getSelectionModel().getSelectedItem()); refresh(orderIDInput);});
 
         Button kembaliBtn = new Button("Kembali");
+        kembaliBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         kembaliBtn.setOnAction(e -> stage.setScene(scene));
 
-        menuLayout.getChildren().addAll(orderIDInput,paymentBox,bayarBtn,kembaliBtn);
+        addFadeTransition(orderIDInput);
+        addFadeTransition(paymentBox);
+        addFadeTransition(bayarBtn);
+        addFadeTransition(kembaliBtn);
+
+        addHoverEffect(bayarBtn);
+        addHoverEffect(kembaliBtn);
+
+        menuLayout.getChildren().addAll(welcomeText,orderIDInput,paymentBox,bayarBtn,kembaliBtn);
         menuLayout.setAlignment(Pos.CENTER);
-        payBillScene = new Scene(menuLayout, 400, 600);
+        payBillScene = new Scene(menuLayout, 500, 600);
         return payBillScene;
     }
 
     private Scene createCekSaldoScene() {
         // TODO: Implementasikan method ini untuk menampilkan page cetak saldo
         VBox menuLayout = new VBox(10);
+        menuLayout.setStyle("-fx-background-color: black;");
+
+        Text welcomeText = new Text("Saldo User");
+        welcomeText.setFont(Font.font(welcomeText.getFont().getName(), FontWeight.BOLD, 20));
+        welcomeText.setFill(Color.WHITE);
+        welcomeText.setTextAlignment(TextAlignment.CENTER);
+        addShadow(welcomeText);
 
         Text namaUser = new Text(user.getNama());
+        namaUser.setFill(Color.WHITE);
         Text saldoUser = new Text("Saldo: Rp " + user.getSaldo());
+        saldoUser.setFill(Color.WHITE);
 
         Button kembaliBtn = new Button("Kembali");
+        kembaliBtn.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         kembaliBtn.setOnAction(e -> stage.setScene(scene));
 
-        menuLayout.getChildren().addAll(namaUser, saldoUser, kembaliBtn);
+        menuLayout.getChildren().addAll(welcomeText, namaUser, saldoUser, kembaliBtn);
         menuLayout.setAlignment(Pos.CENTER);
 
-        cekSaldoScene = new Scene(menuLayout, 400, 600);
+        addFadeTransition(namaUser);
+        addFadeTransition(saldoUser);
+        addFadeTransition(kembaliBtn);
+        addHoverEffect(kembaliBtn);
+
+
+        cekSaldoScene = new Scene(menuLayout, 500, 600);
         return cekSaldoScene;
     }
 
